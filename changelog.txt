@@ -1,4 +1,4 @@
 alpha
-3.71 - added margoss
-3.75 - use map pins if tomtom not loaded
-3.85 - fixed ttcheck
+0.3.71 - added margoss
+0.3.75 - use map pins if tomtom not loaded
+0.3.85 - fixed ttcheck
