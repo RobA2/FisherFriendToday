@@ -28,6 +28,7 @@ local fftpin={
 }
 --todo list: combine way & pin but use each npc as separate tables?
 SLASH_FFT1 = "/fft"
+--note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
 local function fftmain(opt)--add 1-6 adj--can use multi opt? /fft xxx xxx
 	local adj=0--set as a dropdown list for any possible timing issues
 	--local ft=#fftbl--table length catcher--if needed in future
@@ -39,7 +40,7 @@ local function fftmain(opt)--add 1-6 adj--can use multi opt? /fft xxx xxx
 	--save as ffs saved variable[last known]?
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
-	--local ttcheck=(C_AddOns.IsAddOnLoaded("TomTom"))--not working as a variable?
+	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom")--Works!! if tt is loaded,ttcheck saves, if not then nil
 	if opt == 'm' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt == 'n' or opt=='next' then ff=fn end -- added for pin next
 	local usepin=("|cffffff00|Hworldmap:"..fftpin[ff].."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftbl[ff].."]|h|r")
@@ -48,28 +49,27 @@ local function fftmain(opt)--add 1-6 adj--can use multi opt? /fft xxx xxx
 		print(" ")
 		print("FF Today: "..fftbl[ff]..". Reset ["..art.."] in "..qrts);
 	end
-	if opt=='pin' then
+	if opt=='p' or opt=='pin' then
 		--save next note for table redo list
 		--C_Map.SetUserWaypoint(UiMapPoint.CreateFromVector2D(fftpin[1],CreateVector2D(fftpin[2],fftpin[3])))
 		DEFAULT_CHAT_FRAME:AddMessage(usepin);
 	end
 	if opt == 'w' or opt=='way'  then
-		if C_AddOns.IsAddOnLoaded("TomTom") then
+		if ttcheck then
 			SlashCmdList.TOMTOM_WAY(fftway[ff]..fftbl[ff])
 		else
 			DEFAULT_CHAT_FRAME:AddMessage(usepin);
 		end
 	end
 	if opt=='n' or opt=='next' then
-		if C_AddOns.IsAddOnLoaded("TomTom") then
+		if ttcheck then
 			SlashCmdList.TOMTOM_WAY(fftway[fn]..fftbl[fn])
 		else
 			DEFAULT_CHAT_FRAME:AddMessage(usepin);--ff=fn
-			--print("|cffff8800**[TomTom] not detected**|r") end--orange text argb alpha[always ff]
 		end
 	end
 	if opt == 'm' or opt == 'mar' then
-		if C_AddOns.IsAddOnLoaded("TomTom") then
+		if ttcheck then
 			SlashCmdList.TOMTOM_WAY(fftway[7]..fftbl[7])
 		else
 			DEFAULT_CHAT_FRAME:AddMessage(usepin);--added opt7 check to show margoss usepin
@@ -77,17 +77,16 @@ local function fftmain(opt)--add 1-6 adj--can use multi opt? /fft xxx xxx
 	end
 	if opt == '?' or opt=='help' then
 		print(" ")
-		if not (C_AddOns.IsAddOnLoaded("TomTom")) then
-			--if not ttcheck==1 then -- ttcheck variable not workin
+		if not ttcheck then
 			print("|cffff8800**[TomTom] not detected-Using map pins**|r")
 		end
-		print("/fft      -prints the current Fisherfriend and reset time")
-		print("/fft pin  -send pin link to chat")
-		print("|cffffcccc/fft w / way  -set waypoint for current Fisherfriend|r")
-		print("|cffffcccc/fft n / next -set waypoint for the next Fisherfriend|r")
-		print("|cffffcccc/fft m / mar  -set waypoint for Margoss|r")
+		print("|cffffcccc/fft|r -prints the current Fisherfriend and reset time")
+		print("|cffffcccc/fft p / pin|r -map pin link for current Fisherfriend")
+		print("|cffffcccc/fft w / way|r -set waypoint for current Fisherfriend")
+		print("|cffffcccc/fft n / next|r -set waypoint for the next Fisherfriend")
+		print("|cffffcccc/fft m / mar|r -set waypoint for Margoss")
 		--print("   [though he is not a FisherFriend, is related enough :)")
-		print("/fft ? or /fft help -this help list :)")
+		print("|cffffcccc/fft ? or /fft help|r -this help list :)")
 		print("|Cffff88ff/rl       -Reload interface|r")
 	end
 	if opt== 'info' then

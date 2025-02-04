@@ -1,5 +1,5 @@
 ## Title: FisherFriend Today
-## Version: 3.75 alpha
+## Version: 3.85 alpha
 ## Author: llithari
 ## Interface: 110700
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
