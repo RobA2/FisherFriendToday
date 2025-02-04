@@ -1,0 +1,2 @@
+3.71 - added margoss
+3.75 - use map pins if tomtom not loaded
