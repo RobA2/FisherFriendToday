@@ -2,3 +2,6 @@ alpha
 0.3.71 - added margoss
 0.3.75 - use map pins if tomtom not loaded
 0.3.85 - fixed ttcheck
+0.3.87 2025-02-06 - adjustment option if cycle is out of sync
+0.3.88 - much fiddling with slash commands that won't matter when option menu is done
+0.3.90 2025-02-07 - set a first run announcement
