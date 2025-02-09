@@ -1,4 +1,5 @@
 v0.3.85 alpha 2025-02-03
+[notes are pretty much the same for future builds, but heres the first write up]
 Very raw... very alpha, but stable :) So far only works with slash command in game.
 Planning to have an interface for options and titan bar, but that all depends on wow patch 11.1 changes.
 (and how well I can learn to code lua) :)

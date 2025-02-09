@@ -5,3 +5,4 @@ alpha
 0.3.87 2025-02-06 - adjustment option if cycle is out of sync
 0.3.88 - much fiddling with slash commands that won't matter when option menu is done
 0.3.90 2025-02-07 - set a first run announcement
+0.4.00 2025-02-08 - Complete rewrite of the tables
