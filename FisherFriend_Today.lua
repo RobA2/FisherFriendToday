@@ -1,3 +1,6 @@
+--this file renamed fftmain.lua -- included on this upload to show changes on github
+local _, addon = ...
+
 local fftbl={
 	"Broken Shore - Impus",
 	"Azsuna - Ilyssia of the Waters",
@@ -19,13 +22,22 @@ local fftc={
 }
 
 SLASH_FFT1 = "/fft"
+local adj=0--initialize so addon loads correctly
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
 local function fftmain(opt)
-	local adj=0
-	if strmatch(opt,"%d") then
-		adj=tonumber(opt)
-	end	
+	if addon:GetOption('adjshow') then --settings check
+		adj=(addon:GetOption('adjn'))
+	else
+		adj=0
+	end
+	--if addon:GetOption('navT') then --tomtom/settings checker
+	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom") and addon:GetOption('navT')
+	--end
+	--if strmatch(opt,"%d") then -- command line entry parse for adj number
+	--	adj=tonumber(opt)
+	--end	
+	--Evaluator
 	--local ft=#fftbl--table length catcher--if needed in future
 	local stl=tonumber(C_DateAndTime.GetServerTimeLocal())
 	local qrt=GetQuestResetTime() --save result
@@ -35,7 +47,6 @@ local function fftmain(opt)
 	--save as ffs saved variable[last known]?
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
-	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom")--later option to be saved var for toggle/select
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt=='n' or opt=='next' then ff=fn end -- added for pin next
 	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..fftbl[ff])
@@ -43,22 +54,28 @@ local function fftmain(opt)
 	local function waypin()
 		if ttcheck then
 			SlashCmdList.TOMTOM_WAY(usetom);
+			--print("TomTom"..usetom)
 		else
 			DEFAULT_CHAT_FRAME:AddMessage(usepin);
+			--print("MapPin")
 		end
 	end
+	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
 	--start slash command processing
-	--was looking up ways to combine argument evaluation...
-	-- but again... making an interface would solve these things :)
-	if opt=='' or adj>0 then
-		if adj>0 then print("|cffddaaffFF Today: [adjustment="..adj.."]|r")
+	if opt=='' or adj>0 then -- default print/also force print adjustment if set
+		if adj>0 then print("|cffddaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
 		print("|cffddddff "..fftbl[ff]..". Reset ["..art.."] in "..qrts.."|r");
 	end
 	if opt=='c' then -- was for testing/may remove for public release
 		print("|cffddddff "..fftbl[ff]..". Reset ["..art.."] in "..qrts.."|r");
 		print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
-		SlashCmdList.TOMTOM_WAY(usetom);
+		print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
+		if not ttcheck then
+			print(tterk)
+		else
+			SlashCmdList.TOMTOM_WAY(usetom);--this line will error if used on its own w/out tt
+		end
 		DEFAULT_CHAT_FRAME:AddMessage(usepin);
 	end
 	if opt=='p' or opt=='pin' then
@@ -73,7 +90,7 @@ local function fftmain(opt)
 	end
 	if opt=='?' or opt=='help' then
 		if not ttcheck then
-			print("|cffff8800**[TomTom] not detected-FFT will use map pins**|r")
+			print(tterk)
 		else
 			print("|cffccffcc                 ---FFT---|r")
 		end
@@ -82,8 +99,12 @@ local function fftmain(opt)
 		print("|cffffcccc/fft w / way|r -set waypoint for current Fisherfriend|r")
 		print("|cffffcccc/fft n / next|r -set waypoint for the next Fisherfriend|r")
 		print("|cffffcccc/fft m / mar|r -set waypoint for Margoss|r")
-		print("|cffffcc88/fft 1-5  -adjustment value if cycle is out of sync|r")
-		print("|Cffff88ff/rl       -Reload interface|r")
+		print("|cffffcc88/ffto or /ffts -Open the setting page|r")
+		--print("|cffffcc88/fft 1-5  -adjustment value if cycle is out of sync|r")
+		-- 1-5 disabled on line 28 in favor of option menu
+		print("|cffaacccc/fft a       -announcment for current Fisherfriend|r")
+		print("|cffaacccc/fft c, info -testing info n stuffs|r")
+		print("|Cffff88ff/rl          -Reload interface|r")
 	end
 	if opt== 'info' then -- this can go away in public builds? or retain for diags/saved var
 		print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriend_Today","version").."|r")
@@ -106,10 +127,13 @@ end
 	SlashCmdList["RL"] = function() ReloadUI() end
 --run once for announcement
 C_Timer.After(0, function() -- leave at 0
-	C_Timer.After(6, function() -- default is 3 - 6 for my slow gears (add to option menu)
-		fftmain("a")
+	C_Timer.After(3, function() -- default is 3 - 6 for my slow gears (add to option menu)
+		fftmain("");
+		if addon:GetOption('announce') then
+			fftmain("a");
+		end
 	end)
 end)
 
 	
---end--if you missed a close function, this will at least help format to track down the oops
+--end--if you missed a close function, this can at least help format to track down the oops
