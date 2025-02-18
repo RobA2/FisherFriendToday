@@ -6,3 +6,9 @@ alpha
 0.3.88 - much fiddling with slash commands that won't matter when option menu is done
 0.3.90 2025-02-07 - set a first run announcement
 0.4.00 2025-02-08 - Complete rewrite of the tables
+0.4.01 2025-02-15 - added Dashi lib to start work on option menu[or not-no ldb?]
+0.4.02 Removed Dashi library... Love the options to simplify things, but feels like overkill right now
+0.4.03 tested with ai assisted code for menus.... omg just no :/
+0.4.04 Dashi is back... seems great for menu writing, but will still need ace later for ldb
+0.4.06 menu works-ish, but not referenced by main code yet
+0.6.06 2025-02-18 - MASSIVE coding for menu, saved variables & rewriting/removing slash arguments

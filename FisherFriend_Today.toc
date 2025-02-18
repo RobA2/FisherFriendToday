@@ -1,9 +1,13 @@
-## Title: FisherFriend Today
-## Version: 0.4.00 alpha
+## Title: (FFT) FisherFriend Today
+## Version: 0.6.06 alpha
 ## Author: llithari
 ## Interface: 110700
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
-## OptionalDeps: TomTom
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
-FisherFriend_Today.lua
+## OptionalDeps: TomTom
+## SavedVariables: FFTDB
+
+libs\Dashi\embed.xml
+fftsettings.lua
+fftmain.lua
