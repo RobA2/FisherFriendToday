@@ -12,3 +12,5 @@ alpha
 0.4.04 Dashi is back... seems great for menu writing, but will still need ace later for ldb
 0.4.06 menu works-ish, but not referenced by main code yet
 0.6.06 2025-02-18 - MASSIVE coding for menu, saved variables & rewriting/removing slash arguments
+0.6.07 2028-02-21 - lets just say, there was no luck with the interface yet :/
+0.7.07 2025-02-23 - Major update with ace3/ldb... still issue with click, but it's progress

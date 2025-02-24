@@ -1,5 +1,5 @@
 ## Title: (FFT) FisherFriend Today
-## Version: 0.6.06 alpha
+## Version: 0.7.07 alpha
 ## Author: llithari
 ## Interface: 110700
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
@@ -8,6 +8,13 @@
 ## OptionalDeps: TomTom
 ## SavedVariables: FFTDB
 
+# Libraries
 libs\Dashi\embed.xml
-fftsettings.lua
+libs\Ace3\LibStub\LibStub.lua
+libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.lua
+libs\Ace3\AceEvent-3.0\AceEvent-3.0.lua
+# fftsettings.lua
 fftmain.lua
+# fftldb.lua
+# Frame1.xml
+libs\LibDataBroker-1.1\LibDataBroker-1.1.lua

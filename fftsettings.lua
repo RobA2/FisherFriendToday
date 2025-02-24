@@ -30,13 +30,15 @@ local fftsettings = {
 		tooltip = L['Turn the startup raid style announcement on/off'],
 		default = true,
 	},
-	{
-		key = 'fftframe', --placeholder? use frame for display vs ldb
-		type = 'toggle',
-		title = L['Show FFT frame?'],
-		tooltip = L['**PLACEHOLDER** Turn the FFT frame on/off'],
-		default = true,
-	},
+--maybe someday this will toggle a frame... or I'll toss it in favor of ldb
+	--{
+	--	key = 'fftframe', --placeholder? use frame for display vs ldb
+	--	type = 'toggle',
+	--	title = L['Show FFT frame?'],
+	--	tooltip = L['**PLACEHOLDER** Turn the FFT frame on/off'],
+	--	default = true,
+	--},
+
 	--{
 	--	key = 'adjn',
 	--	type = 'slider', -- sliders are not usually a thing, so need to check event to see what is triggering wrong
@@ -79,4 +81,4 @@ local fftsettings = {
 
 addon:RegisterSettings('FFTDB', fftsettings)
 addon:RegisterSettingsSlash('/ffts','/ffto')
-
+addon:RegisterEvent('ADDON_LOADED')

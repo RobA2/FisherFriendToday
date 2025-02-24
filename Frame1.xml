@@ -1,0 +1,38 @@
+<Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Frame1.lua" />
+	<Frame name="Frame1" inherits="BasicFrameTemplate" alpha="0" parent="UIParent" toplevel="true" movable="true">
+		<Size x="216" y="77" />
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="362" y="-65" />
+			</Anchor>
+		</Anchors>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
+		</KeyValues>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="">
+					<Size x="176" y="20" />
+					<Anchors>
+						<Anchor x="20" y="-34" point="TOPLEFT" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				Frame1_OnLoad()
+			</OnLoad>
+			<OnDragStart>
+				self:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
+			<OnEvent>
+				Frame1_OnEvent()
+			</OnEvent>
+		</Scripts>
+	</Frame>
+</Ui>
