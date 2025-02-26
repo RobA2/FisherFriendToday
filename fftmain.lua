@@ -1,9 +1,11 @@
-local _, addon = ...
-local L = addon.L
+FisherFriend_Today= LibStub("AceAddon-3.0"):NewAddon("FisherFriend_Today", "AceConsole-3.0", "AceEvent-3.0")
+local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
+local _, addon = ... --dashi?
+local L = addon.L --dashi?
 --_G[addonName] = addon
 
 --99% certain that it is Dashi that is my issue
---likely due to the other libs that are coflicting
+--likely due to the other libs that are conflicting
 --and since dashi only does one thing for me....
 -- time to learn ace option menus :/
 
@@ -101,12 +103,12 @@ local fftc={
 	{680,50.60,49.20},--sha'leth
 	{619,44.68,61.97},--margoss
 }
-local ffts=""--define string for other files/functions
+local fftstring=""--define string for other files/functions
 SLASH_FFT1 = "/fft"
 local adj=0--initialize so addon loads correctly
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
-local function fftmain(opt)
+local function fftcore(opt)
 	--------
 	--core
 	--------
@@ -132,10 +134,10 @@ local function fftmain(opt)
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt=='n' or opt=='next' then ff=fn end -- added for pin next
 	-----tostring
-	ffts=tostring(fftbl [ff])-- 
-	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..ffts)
-	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..ffts.."]|h|r")
-	--addon.fftshow=ffts -- not working
+	fftstring=tostring(fftbl [ff])-- works, but when opt=m,n,or adj-shows on ldb
+	--that it shows on the ldb is fine, but need to prepend with the alternate info
+	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..fftstring)
+	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
 	local function waypin()
 		if ttcheck then
 			SlashCmdList.TOMTOM_WAY(usetom);
@@ -146,15 +148,17 @@ local function fftmain(opt)
 		end
 	end
 	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
+	---------------------------------
 	--start slash command processing
+	---------------------------------
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
 		if adj>0 then print("|cffddaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
-		print("|cffddddff "..ffts..". Reset ["..art.."] in "..qrts.."|r");
+		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
 	if opt=='c' then -- was for testing/may remove for public release
-		print("|cffddddff "..ffts..". Reset ["..art.."] in "..qrts.."|r");
+		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
 		print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
 		if not ttcheck then
@@ -171,7 +175,9 @@ local function fftmain(opt)
 		waypin();
 	end
 	if opt=='n' or opt=='next' then
-		print("|cffaaddffFF Next: "..ffts.."|r")
+		fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
+		print("|cffaaddffFF "..fftstring.."|r")
+		--print("|cffaaddffFF Next: "..fftstring.."|r")
 		waypin();
 	end
 	if opt=='?' or opt=='help' then
@@ -189,11 +195,11 @@ local function fftmain(opt)
 		--print("|cffffcc88/fft 1-5  -adjustment value if cycle is out of sync|r")
 		-- 1-5 disabled on line 28 in favor of option menu
 		print("|cffaacccc/fft a       -announcment for current Fisherfriend|r")
-		print("|cffaacccc/fft c, info -testing info n stuffs|r")
+		--print("|cffaacccc/fft c, info -testing info n stuffs|r")
 		print("|Cffff88ff/rl          -Reload interface|r")
 	end
 	if opt== 'info' then -- this can go away in public builds? or retain for diags/saved var
-		print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriend_Today","version").."|r")
+		print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
 		local r1=GetCurrentRegionName() 
 		local r2=GetRealmName()
 		print(" Region/Realm: "..r1.."/"..r2)
@@ -205,11 +211,14 @@ local function fftmain(opt)
 		print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
 	end
 	if opt=='a' then
-		RaidNotice_AddMessage(RaidWarningFrame,"FF Today: "..ffts..". Reset ["..art.."]",ChatTypeInfo["RAID_WARNING"]);
+		RaidNotice_AddMessage(RaidWarningFrame,"FF Today: "..fftstring..". Reset ["..art.."]",ChatTypeInfo["RAID_WARNING"]);
 	end
-end-- end of core function
+end
+-----------------------
+-- end of core function
+-----------------------
 
-	SlashCmdList["FFT"] = fftmain
+	SlashCmdList["FFT"] = fftcore
 	SLASH_RL1 = "/rl"
 	SlashCmdList["RL"] = function() ReloadUI() end
 --------
@@ -221,9 +230,9 @@ end-- end of core function
 ----------------------
 --local function OnEvent(self, event, ...)
 --	if addon:GetOption('announce') then --MUST follow timer or it tries to run b4 vars rdy
---			fftmain("a");--raid announce
---			fftmain("");-- standard print
---			--addon.fftmain=fftmain()--- possible issue? wrong place? wrong what??
+--			fftcore("a");--raid announce
+--			fftcore("");-- standard print
+--			--addon.fftcore=fftcore()--- possible issue? wrong place? wrong what??
 --		end
 --end
 
@@ -240,9 +249,9 @@ end-- end of core function
 --		--event never loads, then repeats and halts everything, bleh
 --		--if GetOption('announce') then 
 --		if announce then
---			fftmain("a");--raid announce
+--			fftcore("a");--raid announce
 --		end
---		fftmain("");-- standard print
+--		fftcore("");-- standard print
 --			end)
 --		end)
 --	end
@@ -275,9 +284,9 @@ end-- end of core function
 	--	--C_Timer.After(3, function() -- default is 3 may add to option menu
 	--	--if addon:GetOption('announce') then --MUST follow timer or it tries to run b4 vars rdy?
 	--	if GetOption('announce') then --MUST follow timer or it tries to run b4 vars rdy?
-	--		fftmain("a");--raid announce
-	--		fftmain("");-- standard print
-	--		--addon.fftmain=fftmain()--- possible issue? wrong place? wrong what??
+	--		fftcore("a");--raid announce
+	--		fftcore("");-- standard print
+	--		--addon.fftcore=fftcore()--- possible issue? wrong place? wrong what??
 	--	end
 	--end)
 	--end)
@@ -294,7 +303,27 @@ end-- end of core function
 -------------------------------------------
 -- shoving ldb section here til I get global mess sorted
 -------------------------------------------
---local UPDATEPERIOD, elapsed = 0.5, 0
+-------------------
+--open setting by left click ldb -- is not working
+-------------------
+local function fftOpenSet()
+	--function wlMiniMapOnClick(self, button, down)
+    if Settings and SettingsPanel and Settings.OpenToCategory then
+        if SettingsPanel:IsShown() then
+            HideUIPanel(SettingsPanel);
+        else
+            Settings.OpenToCategory("(FFT) FisherFriendToday");
+			--Settings.OpenToCategory("FisherFriendToday");
+        end
+    elseif InterfaceOptionsFrame then
+        if not InterfaceOptionsFrame:IsShown() then
+            InterfaceOptionsFrame_OpenToCategory([[(FFT) FisherFriendToday]]);
+			--InterfaceOptionsFrame_OpenToCategory([[FisherFriendToday]]);
+        else
+            InterfaceOptionsFrame:Hide();
+        end
+    end
+end
 
 	local function rdychk()
 		--repeat   --event nvr triggerd?
@@ -305,34 +334,56 @@ end-- end of core function
 				--event never loads, then repeats and halts everything, bleh
 				--if GetOption('announce') then 
 				if announce then
-					fftmain("a");--raid announce
+					fftcore("a");--raid announce
 				end
-				fftmain("");-- standard print
+				fftcore("");-- standard print
 			end)
 		end)
 		------------
 		--ldb start
 		----------
-		local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
+		--local ldb = LibStub:GetLibrary("LibDataBroker-1.1") --moved to top of file
 		local dataobj = ldb:NewDataObject("FisherFriendToday",
 			{type = "data source",
 				icon = "Interface\\Icons\\Inv_misc_2h_draenorfishingpole_b_01",
-				--OnClick = fftmain("w"), --loads before settings????[yes, in the toc, fixed?]
-				--not fixed... need to check on how to call the function
-				--after everything is actually loaded
+				OnClick = function(clickedframe, button)
+					if (button == "LeftButton") then --add "middle" for margos?
+						if (IsShiftKeyDown()) then
+							--fftcore("n") disabled for now
+						else
+							fftcore("w")
+						end
+					else-- if any other 'click'
+						fftcore("n")-- right click for now/disabled for now
+						--fftOpenSet() --not working
+					end
+				end,
+				-- autoturnin reference for correct onclick operation
+				--OnClick = function(clickedframe, button)
+				--	if (button == "LeftButton") then
+				--		AutoTurnIn:ShowOptions("")
+				--	else
+				--		AutoTurnIn:SetEnabled(not db.enabled)
+				--	end
+				--end,
+				-- autoturnin end referecne
 				label = "FFT",
 				text = "FisherFriendToday"})
 		local f = CreateFrame("frame")
 
 		f:SetScript("OnUpdate", function(self, elap)
-			--dataobj.text = string.format("%q", ffts)
-			dataobj.text = (" "..ffts)
+			dataobj.text = (" "..fftstring)--prepend with opt,m,n,etc
+		--change onclick to update on click,use alt,ctrl,shift for opt-n/m/somthin--right click for navigation
 		end)
 
 
 		function dataobj:OnTooltipShow()
-			self:AddLine("Left click for FFT current waypoint") -- Always keep Right click for waypoint
-			--self:AddLine("Right click for FFT next waypoint") -- make dropdown but retain the basic right click?
+			--self:AddLine("|cffffcc88Right click for options|r") -- click section fine, but 'open settings' is not
+			self:AddLine("Left click for current FFT waypoint")
+			--self:AddLine("Shift + Left click for FFT next waypoint")
+			self:AddLine("Right click for next FFT waypoint")--disabled for now
+			self:AddLine("|cffffcc88 /ffto for options|r")
+			self:AddLine("|cffcccc88 /fft ? for help|r")
 		end
 
 		function dataobj:OnEnter()
@@ -342,7 +393,6 @@ end-- end of core function
 			dataobj.OnTooltipShow(GameTooltip)
 			GameTooltip:Show()
 		end
-
 		function dataobj:OnLeave()
 			GameTooltip:Hide()
 		end
@@ -353,27 +403,4 @@ rdychk()
 -- end ldb section
 -----------------------------
 
-
-
----------------------------------
---c-timer moved here so maybe the #$@#$ settign will load before fucntions are called
---[why wont the @$@#$ event work lol]
--------------------------------
---run once on load...do NOT rearange the timer... again...and fix... and forget.. again ...lol
-
-
---function myTest(incrementVal)
---	return incrementVal + 10;
---end
-
---local retOK, ret1 = pcall(myTest,"string value");
---local msg = "";
---if (retOK) then
---	msg = "Function succeeded, result: " .. ret1 .. ".";
---else
---	msg = "Function failed, error text: " .. ret1 .. ".";
---end
---DEFAULT_CHAT_FRAME:AddMessage(msg);
-
-
-	--end--if you missed a close function, this can at least help format to track down the oops
+--end --if you missed a close function, this can at least help format to track down the oops
