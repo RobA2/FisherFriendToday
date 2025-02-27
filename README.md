@@ -1,6 +1,6 @@
 # FisherFriendToday
 ## WoW retail addon for locating the Legion daily Fisherfriend of the Isles
-tldr: Help find the current npc for the Achievment "Fisherfriend of the Isles", <br>
+tldr: Help find the current npc for the Achievement "Fisherfriend of the Isles", <br>
 -which also helps with the fishing artifact "Underlight Angler"<br>
 
 Tons of other addons for tracking reputations, fishing skill, etc...<br>
@@ -24,12 +24,15 @@ but specifically, it has a great deal of usage by granting your character:<br>
 -breath underwater,<br>
 -faster swimming,<br>
 -and, technically, increasing your stealth while fishing<br>
-though I'm not sure anyone can confim that the last one still works :)<br>
+though I'm not sure anyone can confirm that the last one still works :)<br>
 
 This addon is meant to help find which Fisherfriend is up this day,<br>
-which means you can work on reputaion toward the "Fisherfriend of the Isles" achievement<br>
+which means you can work on reputation toward the "Fisherfriend of the Isles" achievement<br>
 But also, your main can farm the rare lures for your alts,<br>
 so that they can get the Underlight faster as well.<br>
+Though the achievements "A Cast Above the Rest" & "Bigger Fish to Fry"<br>
+are now account wide/warbound, still need the lures for the artifact fish :)<br>
+
 
 Coffee is always nice :)<br>
 https://ko-fi.com/llithari
