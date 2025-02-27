@@ -1,5 +1,7 @@
 # FisherFriendToday
-## WoW retail addon for locating the Legion Fisherfriend of the day
+## WoW retail addon for locating the Legion daily Fisherfriend of the Isles
+tldr: Help find the current npc for the Achievment "Fisherfriend of the Isles", <br>
+-which also helps with the fishing artifact "Underlight Angler"<br>
 
 Tons of other addons for tracking reputations, fishing skill, etc...<br>
 But none to show which Fisherfriend is up that day!<br>
@@ -13,6 +15,21 @@ but why not have a tracker in game to help out :)<br>
 TomTom is recommended but not required.<br>
 Same with your choice of LDB addon, such as Titan panel.<br>
 None are required, but certainly work well with the addon.<br>
+
+The grand purpose even after Legion expansion has long past?<br>
+Quite simply: The Underlight Angler (fishing pole) is unique<br>
+by not only being the only artifact that still works,<br>
+but specifically, it has a great deal of usage by granting your character:<br>
+-the ability to walk on water,<br>
+-breath underwater,<br>
+-faster swimming,<br>
+-and, technically, increasing your stealth while fishing<br>
+though I'm not sure anyone can confim that the last one still works :)<br>
+
+This addon is meant to help find which Fisherfriend is up this day,<br>
+which means you can work on reputaion toward the "Fisherfriend of the Isles" achievement<br>
+But also, your main can farm the rare lures for your alts,<br>
+so that they can get the Underlight faster as well.<br>
 
 Coffee is always nice :)<br>
 https://ko-fi.com/llithari
