@@ -1,10 +1,8 @@
 package-as: FisherFriendToday
-
-
-  on:
-  push:
-    tags:
-      - '**'
+#  on:
+#  push:
+#    tags:
+ #     - '**'
       ignore:
   - Scripts            # ignore the scripts folder
   - Modules/Debug.lua  # ignore a specific file
