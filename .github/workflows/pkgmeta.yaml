@@ -15,9 +15,10 @@ jobs:
 
   runs-on: ubuntu-latest
     ignore:
-     - Scripts            # ignore the scripts folder
-     - Modules/Debug.lua  # ignore a specific file
      - "*.txt"              # ignore multiple files with a pattern
+  #   - Scripts            # ignore the scripts folder
+  #   - Modules/Debug.lua  # ignore a specific file
+     
 
 
 enable-nolib-creation: no
