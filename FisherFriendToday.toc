@@ -1,20 +1,20 @@
 ## Title: (FFT) FisherFriendToday
 # ## Title: FisherFriendToday
-## Version: 0.8.29 beta
+## Version: 0.8.31 beta
 ## Author: llithari
 ## Interface: 110007, 110100
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
-## OptionalDeps: TomTom
+## OptionalDeps: TomTom, Dashi, Ace3
 ## SavedVariables: FFTDB
+
+## X-Curse-Project-ID: 1209403
+# ## X-WoWI-ID: 
+# ## X-Wago-ID: 
 
 # Libraries
 libs\Dashi\embed.xml
-# libs\Ace3\LibStub\LibStub.xml
-# libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml
-# libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml
-
 libs\Ace3\LibStub\LibStub.lua
 libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml
 libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml
@@ -31,9 +31,10 @@ libs\Ace3\AceConfig-3.0\AceConfig-3.0.xml
 libs\Ace3\AceComm-3.0\AceComm-3.0.xml
 libs\Ace3\AceTab-3.0\AceTab-3.0.xml
 libs\Ace3\AceSerializer-3.0\AceSerializer-3.0.xml
-
-# fftsettings.lua
-fftmain.lua
-# fftldb.lua
-# Frame1.xml
 libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+
+fftmain.lua
+
+# libs\Ace3\LibStub\LibStub.xml
+# libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml
+# libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml
