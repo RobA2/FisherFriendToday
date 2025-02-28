@@ -1,57 +1,38 @@
 package-as: FisherFriendToday
-# we need to let GitHub know _when_ we want to release.
-# this is typically only when we create a new tag.
-# make sure your tags are annotated!
-on:
-  workflow_dispatch:
+'on':
+  workflow_dispatch: null
   push:
     tags:
       - '**'
-  # a workflow is built up as jobs, and within these jobs are steps
 jobs:
-
-  # "release" is a job, you can name it anything you want
-  release:
-
+  release: null
   runs-on: ubuntu-latest
-    ignore:
-     - "*.txt"              # ignore multiple files with a pattern
-  #   - Scripts            # ignore the scripts folder
-  #   - Modules/Debug.lua  # ignore a specific file
-     
-
-
-enable-nolib-creation: no
+enable-nolib-creation: 'no'
 externals:
-  libs/Dashi: # required dependency
-    url: https://github.com/p3lim-wow/Dashi
+  libs/Dashi:
+    url: 'https://github.com/p3lim-wow/Dashi'
   Libs/libdatabroker-1.1:
-    url: https://github.com/tekkub/libdatabroker-1-1
-  Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
-  Libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
-  Libs/AceAddon-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceAddon-3.0
-  Libs/AceComm-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceComm-3.0
-  Libs/AceConfig-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0
-  Libs/AceConsole-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceConsole-3.0
-  Libs/AceDB-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceDB-3.0
-  Libs/AceDBOptions-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceDBOptions-3.0
-  Libs/AceEvent-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceEvent-3.0
-  Libs/AceGUI-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceGUI-3.0
-  Libs/AceHook-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceHook-3.0
-  Libs/AceLocale-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceLocale-3.0
-  Libs/AceSerializer-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceSerializer-3.0
-  Libs/AceTimer-3.0: https://repos.curseforge.com/wow/ace3/trunk/AceTimer-3.0
-
+    url: 'https://github.com/tekkub/libdatabroker-1-1'
+  Libs/LibStub: 'https://repos.wowace.com/wow/libstub/trunk'
+  Libs/CallbackHandler-1.0: 'https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0'
+  Libs/AceAddon-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceAddon-3.0'
+  Libs/AceComm-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceComm-3.0'
+  Libs/AceConfig-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceConfig-3.0'
+  Libs/AceConsole-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceConsole-3.0'
+  Libs/AceDB-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceDB-3.0'
+  Libs/AceDBOptions-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceDBOptions-3.0'
+  Libs/AceEvent-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceEvent-3.0'
+  Libs/AceGUI-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceGUI-3.0'
+  Libs/AceHook-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceHook-3.0'
+  Libs/AceLocale-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceLocale-3.0'
+  Libs/AceSerializer-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceSerializer-3.0'
+  Libs/AceTimer-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceTimer-3.0'
   env:
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
-#      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-#      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
-
+    CF_API_KEY: '${{ secrets.CF_API_KEY }}'
   steps:
-      # we first have to clone the AddOn project, this is a required step
-      - name: Clone project
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # gets entire git history, needed for automatic changelogs
-      - name: WoW Packager
+    - name: Clone project
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: WoW Packager
   uses: BigWigsMods/packager@v2.4.1
