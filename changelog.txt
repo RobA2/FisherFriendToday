@@ -17,6 +17,6 @@ alpha
 0.8.18 2025-02-24 - toc update for 11.1. major rewrites get ldb click fixed -ldb to settings frame-tbd
 beta
 0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
-
+0.8.29 2025-02-27 - cleaned up code for deployment/testing
 issues:
 	-announcement not showing on startup
