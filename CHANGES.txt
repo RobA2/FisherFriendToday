@@ -1,0 +1,44 @@
+lightweight tag f5e26e470abaf4c47f681fabd78e75e0f84dde74 v0.8.29-beta
+Author:	GitHub <noreply@github.com>
+Date:	Thu Feb 27 01:51:44 2025 -0700
+
+commit f5e26e470abaf4c47f681fabd78e75e0f84dde74
+Author: RobA2 <aceaxe11@gmail.com>
+Date:   Thu Feb 27 01:51:44 2025 -0700
+
+    Update README.md
+    
+    spell check and related achievement info
+
+commit f8bdf3560da697aa5ac27943bb55b43ba9bdce68
+Author: RobA2 <aceaxe11@gmail.com>
+Date:   Thu Feb 27 01:34:29 2025 -0700
+
+    Update README.md
+    
+    expanded on the reasons for making the addon in the first place
+
+commit 5ed112406b6f22045a7a4816751f5868ccec6e69
+Author: RobA2 <aceaxe11@gmail.com>
+Date:   Tue Feb 25 23:23:44 2025 -0700
+
+    removed old files
+    
+    old files removed. will likely be reinstated for easier coding, but for now, they don't need to sit around confusing things
+
+commit 5ed112406b6f22045a7a4816751f5868ccec6e69
+Author: RobA2 <aceaxe11@gmail.com>
+Date:   Tue Feb 25 23:23:44 2025 -0700
+
+    removed old files
+    
+    old files removed. will likely be reinstated for easier coding, but for now, they don't need to sit around confusing things
+
+commit e189ace734df5b68dd2950076f16894c613ca187
+Author: RobA2 <aceaxe11@gmail.com>
+Date:   Tue Feb 25 23:20:34 2025 -0700
+
+    Delete FisherFriend_Today.toc
+    
+    old filename, not needed
+

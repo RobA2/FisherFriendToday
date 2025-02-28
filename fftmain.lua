@@ -11,13 +11,6 @@ tooltip = L['If deselected or if TomTom not installed, will use in-game Map Pins
 default = true,
 },
 {
-key = 'announce',
-type = 'toggle',
-title = L['Announcement on startup?'],
-tooltip = L['Turn the startup raid style announcement on/off'],
-default = true,
-},
-{
 key = 'adjshow',
 type = 'toggle',
 title = L['Cycle correction?'],
@@ -169,9 +162,6 @@ end
 local function rdychk()
 C_Timer.After(0, function()
 C_Timer.After(3, function()
-if announce then
-fftcore("a");
-end
 fftcore("");
 end)
 end)

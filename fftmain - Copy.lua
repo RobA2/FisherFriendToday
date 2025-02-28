@@ -22,13 +22,14 @@ local fftsettings = {
 		tooltip = L['If deselected or if TomTom not installed, will use in-game Map Pins'],
 		default = true,
 	},
-	{
-		key = 'announce',
-		type = 'toggle',
-		title = L['Announcement on startup?'],
-		tooltip = L['Turn the startup raid style announcement on/off'],
-		default = true,
-	},
+	--{
+	--	key = 'announce',
+	--	type = 'toggle',
+	--	title = L['Announcement on startup?'],
+	--	tooltip = L['Turn the startup raid style announcement on/off'],
+	--	default = true,
+	--},
+
 	--maybe someday this will toggle a frame... or I'll toss it in favor of ldb
 	--{
 	--	key = 'fftframe', --placeholder? use frame for display vs ldb
@@ -181,10 +182,9 @@ local function fftcore(opt)
 		waypin();
 	end
 	if opt=='?' or opt=='help' then
+		print("|cffccffcc                 ===FFT===|r")
 		if not ttcheck then
 			print(tterk)
-		else
-			print("|cffccffcc                 ===FFT===|r")
 		end
 		print("|cffffcccc/fft|r -prints the current Fisherfriend and reset time|r")
 		print("|cffffcccc/fft p / pin|r -map pin link for current Fisherfriend|r")
@@ -329,13 +329,14 @@ end
 		--repeat   --event nvr triggerd?
 		C_Timer.After(0, function()
 			--C_Timer.After(10, rdychk)---just recycles on itself
-			C_Timer.After(6, function()
+			C_Timer.After(3, function()
 				--until(addon.event == "ADDON_LOADED" and arg1 == addon)--pretty sure im stuck in a loop
 				--event never loads, then repeats and halts everything, bleh
 				--if GetOption('announce') then 
-				if announce then
-					fftcore("a");--raid announce
-				end
+
+				--if announce then
+				--	fftcore("a");--raid announce --not working on startup, removed in menu
+				--end
 				fftcore("");-- standard print
 			end)
 		end)
@@ -373,7 +374,7 @@ end
 
 		f:SetScript("OnUpdate", function(self, elap)
 			dataobj.text = (" "..fftstring)--prepend with opt,m,n,etc
-		--change onclick to update on click,use alt,ctrl,shift for opt-n/m/somthin--right click for navigation
+			--change onclick to update on click,use alt,ctrl,shift for opt-n/m/somthin--right click for navigation
 		end)
 
 

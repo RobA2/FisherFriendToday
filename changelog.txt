@@ -18,5 +18,6 @@ alpha
 beta
 0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
 0.8.29 2025-02-27 - cleaned up code for deployment/testing
+0.8.31 fiddly website pkg file formating :/
 issues:
 	-announcement not showing on startup
