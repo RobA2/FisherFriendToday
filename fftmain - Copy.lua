@@ -1,13 +1,12 @@
-FisherFriend_Today= LibStub("AceAddon-3.0"):NewAddon("FisherFriend_Today", "AceConsole-3.0", "AceEvent-3.0")
+FisherFriendToday= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local _, addon = ... --dashi?
 local L = addon.L --dashi?
 --_G[addonName] = addon
 
---99% certain that it is Dashi that is my issue
---likely due to the other libs that are conflicting
---and since dashi only does one thing for me....
--- time to learn ace option menus :/
+--had Dashi issues, thought it was conflicting libs
+--so far it was just my coding
+--dashi works fine, but may migrate all to ace3
 
 -----------------------------
 -- settings[dashi]
@@ -22,36 +21,14 @@ local fftsettings = {
 		tooltip = L['If deselected or if TomTom not installed, will use in-game Map Pins'],
 		default = true,
 	},
-	--{
-	--	key = 'announce',
-	--	type = 'toggle',
-	--	title = L['Announcement on startup?'],
-	--	tooltip = L['Turn the startup raid style announcement on/off'],
-	--	default = true,
-	--},
-
-	--maybe someday this will toggle a frame... or I'll toss it in favor of ldb
-	--{
-	--	key = 'fftframe', --placeholder? use frame for display vs ldb
-	--	type = 'toggle',
-	--	title = L['Show FFT frame?'],
-	--	tooltip = L['**PLACEHOLDER** Turn the FFT frame on/off'],
-	--	default = true,
-	--},
-
-	--{
-	--	key = 'adjn',
-	--	type = 'slider', -- sliders are not usually a thing, so need to check event to see what is triggering wrong
-	--	title = L['Adjustment number in case the app shows the wrong Fisherfriend'],
-	--	tooltip = L['Unless something really crazy happens' .. '\n\n|cffffaaaa' .. L['This should always be 0!'] .. '|r'],
-	--	default = 0,
-	--	minValue = 0,
-	--	maxValue = 5,
-	--	valueStep = 1,
-	--	--valueFormat = formatN, --it REALLY wants this to be a string :/
-	--	valueFormat = formatPercentage,
-	--},
-	-- next menu item not required
+	--maybe someday i'll setup a frame option/toggle... but not today
+	{
+		key = 'announce',
+		type = 'toggle',
+		title = L['Announcement on startup?'],
+		tooltip = L['Turn the raid style announcement on/off'],
+		default = true,
+	},
 	{
 		key = 'adjshow',
 		type = 'toggle',
@@ -59,7 +36,6 @@ local fftsettings = {
 		tooltip = L['Only needed if the wrong Fisherfriend is showing' .. '\n\n|cffffaaaa' .. L['This should usually be off'] .. '|r'],
 		default = false,
 	},
-
 	{
 		key = 'adjn',
 		type = 'menu', -- this works, but shows 'custom' on button if 'value' is string?
@@ -85,6 +61,7 @@ addon:RegisterSettingsSlash('/ffts','/ffto')
 ----------------------------------
 -- end setting section
 ----------------------------------
+--local function fftables()
 local fftbl={
 	"Broken Shore - Impus",
 	"Azsuna - Ilyssia of the Waters",
@@ -104,14 +81,18 @@ local fftc={
 	{680,50.60,49.20},--sha'leth
 	{619,44.68,61.97},--margoss
 }
+--end--fftable
+
 local fftstring=""--define string for other files/functions
 SLASH_FFT1 = "/fft"
 local adj=0--initialize so addon loads correctly
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
+
 local function fftcore(opt)
+	--fftables()--load tables
 	--------
-	--core
+	--core/variables
 	--------
 	if addon:GetOption('adjshow') then --settings check
 		adj=(addon:GetOption('adjn'))
@@ -135,7 +116,7 @@ local function fftcore(opt)
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt=='n' or opt=='next' then ff=fn end -- added for pin next
 	-----tostring
-	fftstring=tostring(fftbl [ff])-- works, but when opt=m,n,or adj-shows on ldb
+	fftstring=tostring(fftbl [ff])-- when opt=m,n,or adj-shows on ldb
 	--that it shows on the ldb is fine, but need to prepend with the alternate info
 	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..fftstring)
 	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
@@ -149,7 +130,13 @@ local function fftcore(opt)
 		end
 	end
 	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
+	---------------
+	--end variable core
+	--start timer setup
+	---------------
+	--self.fftimer()--runc in rdychk section
 	---------------------------------
+	--end timer setup
 	--start slash command processing
 	---------------------------------
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
@@ -158,17 +145,20 @@ local function fftcore(opt)
 		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
-	if opt=='c' then -- was for testing/may remove for public release
-		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
-		print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
-		print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
-		if not ttcheck then
-			print(tterk)
-		else
-			SlashCmdList.TOMTOM_WAY(usetom);--this line will error if used on its own w/out tt
-		end
-		DEFAULT_CHAT_FRAME:AddMessage(usepin);
-	end
+	--if opt=='c' then -- was for testing/may remove for public release
+	--	xx=self:TimeLeft(self.fftimer)--bad reference... issue viewing timer
+	--	print(xx)
+	--end
+	--	print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
+	--	print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
+	--	print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
+	--	if not ttcheck then
+	--		print(tterk)
+	--	else
+	--		SlashCmdList.TOMTOM_WAY(usetom);--this line will error if used on its own w/out tt
+	--	end
+	--	DEFAULT_CHAT_FRAME:AddMessage(usepin);
+	--end
 	if opt=='p' or opt=='pin' then
 		DEFAULT_CHAT_FRAME:AddMessage(usepin);
 	end
@@ -197,22 +187,24 @@ local function fftcore(opt)
 		print("|cffaacccc/fft a       -announcment for current Fisherfriend|r")
 		--print("|cffaacccc/fft c, info -testing info n stuffs|r")
 		print("|Cffff88ff/rl          -Reload interface|r")
+		--print("Timer left: "..AceTimer:TimeLeft(FisherFriendToday))--no??
 	end
-	if opt== 'info' then -- this can go away in public builds? or retain for diags/saved var
-		print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-		local r1=GetCurrentRegionName() 
-		local r2=GetRealmName()
-		print(" Region/Realm: "..r1.."/"..r2)
-		v, b, d, t = GetBuildInfo()
-		print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
-		local d = C_DateAndTime.GetCurrentCalendarTime()
-		local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
-		local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
-		print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
-	end
+	--if opt== 'info' then -- this can go away in public builds? or retain for diags/saved var
+	--	print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+	--	local r1=GetCurrentRegionName() 
+	--	local r2=GetRealmName()
+	--	print(" Region/Realm: "..r1.."/"..r2)
+	--	v, b, d, t = GetBuildInfo()
+	--	print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
+	--	local d = C_DateAndTime.GetCurrentCalendarTime()
+	--	local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
+	--	local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
+	--	print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
+	--end
 	if opt=='a' then
 		RaidNotice_AddMessage(RaidWarningFrame,"FF Today: "..fftstring..". Reset ["..art.."]",ChatTypeInfo["RAID_WARNING"]);
 	end
+	globqrt=qrt--save as global for ace timer
 end
 -----------------------
 -- end of core function
@@ -221,12 +213,106 @@ end
 	SlashCmdList["FFT"] = fftcore
 	SLASH_RL1 = "/rl"
 	SlashCmdList["RL"] = function() ReloadUI() end
+------------
+--readycheck
+------------
+
+	local function rdychk()
+		-----------
+		--setup timer
+		-----------
+		function FisherFriendToday:OnEnable()
+			if addon:GetOption('announce') then
+				fftcore("a")
+			end
+				fftcore("")			
+			--end
+			local fftimer=self:ScheduleTimer(fftcore, globqrt)
+			----maybe the timer is set... maybe it isn't...TimeLeft has known issues :/
+			--xx=tonumber(self.Timeleft(fftimer))--maybe the timer is set... maybe it isn't
+			--print("globqrt: "..globqrt)
+			--print("timer: "..xx)
+			--print(self.TimeLeft(fftimer))
+		end
+		-----------
+		--end timer
+		--ldb start
+		----------
+		local dataobj = ldb:NewDataObject("FisherFriendToday",
+			{type = "data source",
+				icon = "Interface\\Icons\\Inv_misc_2h_draenorfishingpole_b_01",
+				OnClick = function(clickedframe, button)
+					if (button == "LeftButton") then --add "middle" for margos?
+						if (IsShiftKeyDown()) then
+							--fftcore("n") disabled for now
+
+						else
+							fftcore("w")
+						end
+					else-- if any other 'click'
+						fftcore("n")-- right click for now/disabled for now
+						--fftOpenSet() --not working
+					end
+				end,
+				-- autoturnin reference for correct onclick operation
+				--OnClick = function(clickedframe, button)
+				--	if (button == "LeftButton") then
+				--		AutoTurnIn:ShowOptions("")
+				--	else
+				--		AutoTurnIn:SetEnabled(not db.enabled)
+				--	end
+				--end,
+				-- autoturnin end referecne
+				label = "FFT",
+				text = "FisherFriendToday"})
+		local f = CreateFrame("frame")
+
+		f:SetScript("OnUpdate", function(self, elap)
+			dataobj.text = (" "..fftstring)--prepend with opt,m,n,etc
+			--change onclick to update on click,use alt,ctrl,shift for opt-n/m/somthin--right click for navigation
+		end)
+
+
+		function dataobj:OnTooltipShow()
+			--self:AddLine("|cffffcc88Right click for options|r") -- click section fine, but 'open settings' is not
+			self:AddLine("Left click for current FFT waypoint")
+			--self:AddLine("Shift + Left click for FFT next waypoint")
+			self:AddLine("Right click for next FFT waypoint")--disabled for now
+			self:AddLine("|cffffcc88 /ffto for options|r")
+			self:AddLine("|cffcccc88 /fft ? for help|r")
+		end
+
+		function dataobj:OnEnter()
+			GameTooltip:SetOwner(self, "ANCHOR_NONE")
+			GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
+			GameTooltip:ClearLines()
+			dataobj.OnTooltipShow(GameTooltip)
+			GameTooltip:Show()
+		end
+		function dataobj:OnLeave()
+			GameTooltip:Hide()
+		end
+	end
+
+-----------------------------
+-- end ldb section
+-----------------------------
+--xpcall(rdychk,'')-- keep note if needed later
+rdychk()
+--run once to initalize everything
+
+--end --if you missed a close function, this can at least help format to track down the oops
+
+----------------------------------------------------------
+--NOOOOOOOOOTES
+----------------------------------
 --------
--- c-timer was here
+-- c-timer was here-- all timer notes are outdated & replaced with working code
+-- but there's been a few 'how did i try that before' reasons to keep these notes :)
 --------
 
 ------------------
---event check not working
+--event check was not working--moved all below to ace enable check
 ----------------------
 --local function OnEvent(self, event, ...)
 --	if addon:GetOption('announce') then --MUST follow timer or it tries to run b4 vars rdy
@@ -306,102 +392,21 @@ end
 -------------------
 --open setting by left click ldb -- is not working
 -------------------
-local function fftOpenSet()
-	--function wlMiniMapOnClick(self, button, down)
-    if Settings and SettingsPanel and Settings.OpenToCategory then
-        if SettingsPanel:IsShown() then
-            HideUIPanel(SettingsPanel);
-        else
-            Settings.OpenToCategory("(FFT) FisherFriendToday");
-			--Settings.OpenToCategory("FisherFriendToday");
-        end
-    elseif InterfaceOptionsFrame then
-        if not InterfaceOptionsFrame:IsShown() then
-            InterfaceOptionsFrame_OpenToCategory([[(FFT) FisherFriendToday]]);
-			--InterfaceOptionsFrame_OpenToCategory([[FisherFriendToday]]);
-        else
-            InterfaceOptionsFrame:Hide();
-        end
-    end
-end
-
-	local function rdychk()
-		--repeat   --event nvr triggerd?
-		C_Timer.After(0, function()
-			--C_Timer.After(10, rdychk)---just recycles on itself
-			C_Timer.After(3, function()
-				--until(addon.event == "ADDON_LOADED" and arg1 == addon)--pretty sure im stuck in a loop
-				--event never loads, then repeats and halts everything, bleh
-				--if GetOption('announce') then 
-
-				--if announce then
-				--	fftcore("a");--raid announce --not working on startup, removed in menu
-				--end
-				fftcore("");-- standard print
-			end)
-		end)
-		------------
-		--ldb start
-		----------
-		--local ldb = LibStub:GetLibrary("LibDataBroker-1.1") --moved to top of file
-		local dataobj = ldb:NewDataObject("FisherFriendToday",
-			{type = "data source",
-				icon = "Interface\\Icons\\Inv_misc_2h_draenorfishingpole_b_01",
-				OnClick = function(clickedframe, button)
-					if (button == "LeftButton") then --add "middle" for margos?
-						if (IsShiftKeyDown()) then
-							--fftcore("n") disabled for now
-						else
-							fftcore("w")
-						end
-					else-- if any other 'click'
-						fftcore("n")-- right click for now/disabled for now
-						--fftOpenSet() --not working
-					end
-				end,
-				-- autoturnin reference for correct onclick operation
-				--OnClick = function(clickedframe, button)
-				--	if (button == "LeftButton") then
-				--		AutoTurnIn:ShowOptions("")
-				--	else
-				--		AutoTurnIn:SetEnabled(not db.enabled)
-				--	end
-				--end,
-				-- autoturnin end referecne
-				label = "FFT",
-				text = "FisherFriendToday"})
-		local f = CreateFrame("frame")
-
-		f:SetScript("OnUpdate", function(self, elap)
-			dataobj.text = (" "..fftstring)--prepend with opt,m,n,etc
-			--change onclick to update on click,use alt,ctrl,shift for opt-n/m/somthin--right click for navigation
-		end)
-
-
-		function dataobj:OnTooltipShow()
-			--self:AddLine("|cffffcc88Right click for options|r") -- click section fine, but 'open settings' is not
-			self:AddLine("Left click for current FFT waypoint")
-			--self:AddLine("Shift + Left click for FFT next waypoint")
-			self:AddLine("Right click for next FFT waypoint")--disabled for now
-			self:AddLine("|cffffcc88 /ffto for options|r")
-			self:AddLine("|cffcccc88 /fft ? for help|r")
-		end
-
-		function dataobj:OnEnter()
-			GameTooltip:SetOwner(self, "ANCHOR_NONE")
-			GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
-			GameTooltip:ClearLines()
-			dataobj.OnTooltipShow(GameTooltip)
-			GameTooltip:Show()
-		end
-		function dataobj:OnLeave()
-			GameTooltip:Hide()
-		end
-	end
-	--xpcall(rdychk,'')--run separate till section below is sorted?
-rdychk()
------------------------------
--- end ldb section
------------------------------
-
---end --if you missed a close function, this can at least help format to track down the oops
+----local function fftOpenSet()
+----	--function wlMiniMapOnClick(self, button, down)
+----    if Settings and SettingsPanel and Settings.OpenToCategory then
+----        if SettingsPanel:IsShown() then
+----            HideUIPanel(SettingsPanel);
+----        else
+----            Settings.OpenToCategory("(FFT) FisherFriendToday");
+----			--Settings.OpenToCategory("FisherFriendToday");
+----        end
+----    elseif InterfaceOptionsFrame then
+----        if not InterfaceOptionsFrame:IsShown() then
+----            InterfaceOptionsFrame_OpenToCategory([[(FFT) FisherFriendToday]]);
+----			--InterfaceOptionsFrame_OpenToCategory([[FisherFriendToday]]);
+----        else
+----            InterfaceOptionsFrame:Hide();
+----        end
+----    end
+----end

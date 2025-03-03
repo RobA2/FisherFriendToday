@@ -19,5 +19,7 @@ beta
 0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
 0.8.29 2025-02-27 - cleaned up code for deployment/testing
 0.8.31 fiddly website pkg file formating :/
+0.8.41 fixed setup announcement & readycheck
+0.8.52 Catagory for toc & added tool for extreme code cleanup when publishing
 issues:
-	-announcement not showing on startup
+	-timer issues to refresh data at daily reset time
