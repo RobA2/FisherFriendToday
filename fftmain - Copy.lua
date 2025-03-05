@@ -1,4 +1,4 @@
-FisherFriendToday= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local _, addon = ... --dashi?
 local L = addon.L --dashi?
@@ -161,8 +161,9 @@ local function fftcore(opt)
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
 	if opt=='c' then -- was for testing/may remove for public release
-		print(FisherFriendToday:TimeLeft(SecondsToTime(FisherFriendToday.TimerOne)))--timers verified
-		print(FisherFriendToday:TimeLeft(SecondsToTime(FisherFriendToday.TimerTwo)))--test with formatting
+		local Tone = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))
+		local Ttwo = SecondsToTime(ffta:TimeLeft(ffta.TimerTwo))
+        print("Timer #1: "..Tone.." / Timer #2: "..Ttwo)
 	end
 	--	print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 	--	print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
@@ -236,13 +237,18 @@ end
 		-----------
 		--setup timer
 		-----------
-		function FisherFriendToday:OnEnable()
-			if addon:GetOption('announce') then
-				fftcore("a")
-			end
+		function ffta:OnEnable()
 			fftcore("")
-			FisherFriendToday.TimerOne=FisherFriendToday:ScheduleTimer("TimerFeedback", (globqrt+5))
+			ffta.TimerOne=ffta:ScheduleTimer("TimerFeedback", (globqrt+5))
 			--this sets the first timer, timer #2 must be a separate from rdychk!
+			if addon:GetOption('announce') then
+				C_Timer.After(10, function()-- set for 10, but will add delay option to menu
+					--multiple addons slow the load time... and in my case, by the time my usual
+					--list loads in, the announcement has already fired n faded
+					--on the minimal addon env, verified that it does indeed announce:)
+				fftcore("a")
+				end)
+			end
 		end
 		-----------
 		--end timer set #1
@@ -318,11 +324,11 @@ rdychk()
 -----------------------------
 --timer begin
 -----------------------------
-function FisherFriendToday:TimerFeedback()
+function ffta:TimerFeedback()
 	print("Reset detected : New FisherFriendToday")
 	fftcore("")
-	FisherFriendToday.timerCount = 0
-	FisherFriendToday.TimerTwo = FisherFriendToday:ScheduleRepeatingTimer("TimerFeedbackTwo", 86400)
+	ffta.timerCount = 0
+	ffta.TimerTwo = ffta:ScheduleRepeatingTimer("TimerFeedbackTwo", 86400)
 	--timer #1 is time left before todays reset +5 sec
 	--timer #2 is just a 24hr repeat that starts when timer #1 dings
 end
@@ -331,13 +337,13 @@ end
 --  self.timerCount = 0
 --end
 
-function FisherFriendToday:TimerFeedbackTwo()
+function ffta:TimerFeedbackTwo()
 	print("Another Reset detected : New FisherFriendToday")
 	fftcore()
-	FisherFriendToday.timerCount = FisherFriendToday.timerCount + 1
+	ffta.timerCount = ffta.timerCount + 1
 	--'self' references keep yelling... bleh
-	if FisherFriendToday.timerCount == 6 then --overkill? :)
-		FisherFriendToday:CancelTimer(FisherFriendToday.TimerTwo)
+	if ffta.timerCount == 6 then --overkill? :)
+		ffta:CancelTimer(ffta.TimerTwo)
 	end
 end
 
