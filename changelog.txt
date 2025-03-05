@@ -24,3 +24,4 @@
 0.8.53 added ldb shift click margoss. Ctrl click reserved for menu
 0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
 0.9.01 Timers verified good
+0.9.02 CF file structure education
