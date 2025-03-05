@@ -1,4 +1,4 @@
-alpha
+	alpha
 0.3.71 - added margoss
 0.3.75 - use map pins if tomtom not loaded
 0.3.85 - fixed ttcheck
@@ -15,11 +15,12 @@ alpha
 0.6.07 2025-02-21 - lets just say, there was no luck with the interface yet :/
 0.7.07 2025-02-23 - Major update with ace3/ldb... still issue with click, but it's progress
 0.8.18 2025-02-24 - toc update for 11.1. major rewrites get ldb click fixed -ldb to settings frame-tbd
-beta
+	beta
 0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
 0.8.29 2025-02-27 - cleaned up code for deployment/testing
 0.8.31 fiddly website pkg file formating :/
 0.8.41 fixed setup announcement & readycheck
-0.8.52 Catagory for toc & added tool for extreme code cleanup when publishing
-issues:
-	-timer issues to refresh data at daily reset time
+0.8.52 Category for toc & added tool for extreme code cleanup when publishing
+0.8.53 added ldb shift click margoss. Ctrl click reserved for menu
+0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
+0.9.01 Timers verified good

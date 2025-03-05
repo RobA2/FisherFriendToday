@@ -90,6 +90,9 @@ local adj=0--initialize so addon loads correctly
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
 
 local function fftcore(opt)
+	if opt then
+		opt=strlower(opt)
+	end
 	--fftables()--load tables
 	--------
 	--core/variables
@@ -102,6 +105,11 @@ local function fftcore(opt)
 	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom") and addon:GetOption('navT')
 	--Evaluator
 	--local ft=#fftbl--table length catcher--if needed in future
+	------------------
+	--if not ff then --if already defined, then no need to recalc....
+	--except.. 'time saving' when i wrote the core, relies on the core recalcing...
+	--alot more than is really needed... sigh
+	------------------
 	local stl=tonumber(C_DateAndTime.GetServerTimeLocal())
 	local qrt=GetQuestResetTime() --save result
 	local qrts=SecondsToTime(qrt) --readable format
@@ -110,9 +118,15 @@ local function fftcore(opt)
 	--save as ffs saved variable[last known]?
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
+	--end --end ff check
 	--------
 	--end core
 	--------
+
+	--recode new var fp=ff,fn,7 ?? cut down on the repeat calls to the core ??
+	-- if so, then would need lcoal refs for the server calcs?
+	--thinking on kyboard... core runs on startup... and then only when called by player or timer
+	-- if it aint broken dont fix it?
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt=='n' or opt=='next' then ff=fn end -- added for pin next
 	-----tostring
@@ -139,16 +153,17 @@ local function fftcore(opt)
 	--end timer setup
 	--start slash command processing
 	---------------------------------
+	--if core is called direct but opt is nil'core()', core still runs, but no chat print
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
 		if adj>0 then print("|cffddaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
 		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
-	--if opt=='c' then -- was for testing/may remove for public release
-	--	xx=self:TimeLeft(self.fftimer)--bad reference... issue viewing timer
-	--	print(xx)
-	--end
+	if opt=='c' then -- was for testing/may remove for public release
+		print(FisherFriendToday:TimeLeft(SecondsToTime(FisherFriendToday.TimerOne)))--timers verified
+		print(FisherFriendToday:TimeLeft(SecondsToTime(FisherFriendToday.TimerTwo)))--test with formatting
+	end
 	--	print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 	--	print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
 	--	print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
@@ -225,32 +240,32 @@ end
 			if addon:GetOption('announce') then
 				fftcore("a")
 			end
-				fftcore("")			
-			--end
-			local fftimer=self:ScheduleTimer(fftcore, globqrt)
-			----maybe the timer is set... maybe it isn't...TimeLeft has known issues :/
-			--xx=tonumber(self.Timeleft(fftimer))--maybe the timer is set... maybe it isn't
-			--print("globqrt: "..globqrt)
-			--print("timer: "..xx)
-			--print(self.TimeLeft(fftimer))
+			fftcore("")
+			FisherFriendToday.TimerOne=FisherFriendToday:ScheduleTimer("TimerFeedback", (globqrt+5))
+			--this sets the first timer, timer #2 must be a separate from rdychk!
 		end
 		-----------
-		--end timer
+		--end timer set #1
 		--ldb start
 		----------
 		local dataobj = ldb:NewDataObject("FisherFriendToday",
 			{type = "data source",
 				icon = "Interface\\Icons\\Inv_misc_2h_draenorfishingpole_b_01",
 				OnClick = function(clickedframe, button)
-					if (button == "LeftButton") then --add "middle" for margos?
+					if (button == "LeftButton") then
 						if (IsShiftKeyDown()) then
-							--fftcore("n") disabled for now
-
+							fftcore("m")--margoss
 						else
-							fftcore("w")
+							if (IsControlKeyDown())  then
+								--time to learn ace menus
+								--Settings.OpenToCategory(categoryID)--dashi
+								--[opens settings, but not to addon]
+							else
+								fftcore("w")
+							end	
 						end
 					else-- if any other 'click'
-						fftcore("n")-- right click for now/disabled for now
+						fftcore("n")-- right click for now
 						--fftOpenSet() --not working
 					end
 				end,
@@ -276,8 +291,8 @@ end
 		function dataobj:OnTooltipShow()
 			--self:AddLine("|cffffcc88Right click for options|r") -- click section fine, but 'open settings' is not
 			self:AddLine("Left click for current FFT waypoint")
-			--self:AddLine("Shift + Left click for FFT next waypoint")
-			self:AddLine("Right click for next FFT waypoint")--disabled for now
+			self:AddLine("Shift + Left click for Margoss")
+			self:AddLine("Right click for next FFT waypoint")
 			self:AddLine("|cffffcc88 /ffto for options|r")
 			self:AddLine("|cffcccc88 /fft ? for help|r")
 		end
@@ -300,12 +315,48 @@ end
 --xpcall(rdychk,'')-- keep note if needed later
 rdychk()
 --run once to initalize everything
+-----------------------------
+--timer begin
+-----------------------------
+function FisherFriendToday:TimerFeedback()
+	print("Reset detected : New FisherFriendToday")
+	fftcore("")
+	FisherFriendToday.timerCount = 0
+	FisherFriendToday.TimerTwo = FisherFriendToday:ScheduleRepeatingTimer("TimerFeedbackTwo", 86400)
+	--timer #1 is time left before todays reset +5 sec
+	--timer #2 is just a 24hr repeat that starts when timer #1 dings
+end
+
+--function MyAddOn:OnEnable()--not needed as rdychk already references it?
+--  self.timerCount = 0
+--end
+
+function FisherFriendToday:TimerFeedbackTwo()
+	print("Another Reset detected : New FisherFriendToday")
+	fftcore()
+	FisherFriendToday.timerCount = FisherFriendToday.timerCount + 1
+	--'self' references keep yelling... bleh
+	if FisherFriendToday.timerCount == 6 then --overkill? :)
+		FisherFriendToday:CancelTimer(FisherFriendToday.TimerTwo)
+	end
+end
+
+-----------------------------
+--timer end code
+-----------------------------
+--run once to initalize everything
 
 --end --if you missed a close function, this can at least help format to track down the oops
 
 ----------------------------------------------------------
---NOOOOOOOOOTES
+--NOOOOOOOOOTES!!!!
 ----------------------------------
+--fftcore only needs to be run on startup
+--further calls maybe causing garbage
+--new func just needs to ref existing data
+--timer calls just need to advance ff since it was already synced on startup
+
+
 --------
 -- c-timer was here-- all timer notes are outdated & replaced with working code
 -- but there's been a few 'how did i try that before' reasons to keep these notes :)
