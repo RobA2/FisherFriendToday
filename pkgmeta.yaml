@@ -29,6 +29,9 @@ externals:
   Libs/AceTimer-3.0: 'https://repos.curseforge.com/wow/ace3/trunk/AceTimer-3.0'
   env:
     CF_API_KEY: '${{ secrets.CF_API_KEY }}'
+    WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+    WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+    GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
   steps:
     - name: Clone project
       uses: actions/checkout@v4
