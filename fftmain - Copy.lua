@@ -25,9 +25,26 @@ local fftsettings = {
 	{
 		key = 'announce',
 		type = 'toggle',
-		title = L['Announcement on startup?'],
+		title = L['Announcement on startup/reset?'],
 		tooltip = L['Turn the raid style announcement on/off'],
 		default = true,
+	},
+	{
+		key = 'anndelay',
+		type = 'menu',
+		title = L['Startup Announcement Delay?'],
+		tooltip = L['This will delay the raid style on startup'],
+		default = 10,--save as number
+		options = {
+			{value = 0, label = '0'},
+			{value = 5, label = '5'},
+			{value = 10, label = '10'},
+			{value = 20, label = '20'},
+			{value = 30, label = '30'},
+			{value = 60, label = '60'},
+		},
+
+		requires = 'announce', -- (optional) dependency on another setting (must be a "toggle"'myToggle')
 	},
 	{
 		key = 'adjshow',
@@ -89,6 +106,7 @@ local adj=0--initialize so addon loads correctly
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
 
+
 local function fftcore(opt)
 	if opt then
 		opt=strlower(opt)
@@ -97,10 +115,11 @@ local function fftcore(opt)
 	--------
 	--core/variables
 	--------
+
 	if addon:GetOption('adjshow') then --settings check
 		adj=(addon:GetOption('adjn'))
 	else
-		adj=0
+		adj=0--leave in place/settings change will need this in core
 	end
 	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom") and addon:GetOption('navT')
 	--Evaluator
@@ -118,6 +137,7 @@ local function fftcore(opt)
 	--save as ffs saved variable[last known]?
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
+	ffta.art=art--global for ldb
 	--end --end ff check
 	--------
 	--end core
@@ -146,13 +166,7 @@ local function fftcore(opt)
 	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
 	---------------
 	--end variable core
-	--start timer setup
 	---------------
-	--self.fftimer()--runc in rdychk section
-	---------------------------------
-	--end timer setup
-	--start slash command processing
-	---------------------------------
 	--if core is called direct but opt is nil'core()', core still runs, but no chat print
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
 		if adj>0 then print("|cffddaaffFF Today: [offset="..adj.."]|r")
@@ -160,21 +174,13 @@ local function fftcore(opt)
 		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
-	if opt=='c' then -- was for testing/may remove for public release
-		local Tone = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))
-		local Ttwo = SecondsToTime(ffta:TimeLeft(ffta.TimerTwo))
-        print("Timer #1: "..Tone.." / Timer #2: "..Ttwo)
+	if opt=='c' then -- used for misc testing
+		local Timer1 = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))
+		local Timer2 = SecondsToTime(ffta:TimeLeft(ffta.TimerD))
+		print("Timer reset: "..Timer1)
+		print("Ann timer left: "..Timer2)
+		print("Announce Delay: "..ffta.adel)
 	end
-	--	print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
-	--	print("C-Test: #"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100))
-	--	print("ttcheck= ["..(ttcheck and 'true' or 'false').."] arrow only shows if you're in Legion!!")
-	--	if not ttcheck then
-	--		print(tterk)
-	--	else
-	--		SlashCmdList.TOMTOM_WAY(usetom);--this line will error if used on its own w/out tt
-	--	end
-	--	DEFAULT_CHAT_FRAME:AddMessage(usepin);
-	--end
 	if opt=='p' or opt=='pin' then
 		DEFAULT_CHAT_FRAME:AddMessage(usepin);
 	end
@@ -218,13 +224,41 @@ local function fftcore(opt)
 	--	print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
 	--end
 	if opt=='a' then
+		--ignores menu setting in case they want to run this in a macro
 		RaidNotice_AddMessage(RaidWarningFrame,"FF Today: "..fftstring..". Reset ["..art.."]",ChatTypeInfo["RAID_WARNING"]);
 	end
 	globqrt=qrt--save as global for ace timer
+	--Timer1()---start/reset
+	ffta:CancelTimer(ffta.TimerOne)--reset on next line
+	ffta.TimerOne=ffta:ScheduleTimer("TimerFeedback", (globqrt+5))
+	if addon:GetOption('announce') then --settings check
+		ffta.adel=(addon:GetOption('anndelay'))
+	else
+		ffta.adel=0--if announc is nil, still need this for error prevention?
+	end
 end
 -----------------------
 -- end of core function
 -----------------------
+-----------------------------
+--timer feedback begin
+-----------------------------
+--function ffta:OnEnable()
+--	if addon:GetOption('announce') then--run once if option
+--		ffta.TimerD=ffta:ScheduleTimer("TimerD1", (ffta.adel))
+--	end
+--	end
+function ffta:TimerD1()
+	fftcore("a")
+end
+function ffta:TimerFeedback()
+	print("|cffcccc88Reset detected : New FisherFriendToday|r")
+	fftcore("a")
+	fftcore("")
+end
+-----------------------------
+--timer end code
+-----------------------------
 
 	SlashCmdList["FFT"] = fftcore
 	SLASH_RL1 = "/rl"
@@ -234,20 +268,10 @@ end
 ------------
 
 	local function rdychk()
-		-----------
-		--setup timer
-		-----------
-		function ffta:OnEnable()
+		function ffta:OnEnable()--prevents startup from glitching
 			fftcore("")
-			ffta.TimerOne=ffta:ScheduleTimer("TimerFeedback", (globqrt+5))
-			--this sets the first timer, timer #2 must be a separate from rdychk!
-			if addon:GetOption('announce') then
-				C_Timer.After(10, function()-- set for 10, but will add delay option to menu
-					--multiple addons slow the load time... and in my case, by the time my usual
-					--list loads in, the announcement has already fired n faded
-					--on the minimal addon env, verified that it does indeed announce:)
-				fftcore("a")
-				end)
+			if addon:GetOption('announce') then--run once if option
+				ffta.TimerD=ffta:ScheduleTimer("TimerD1", (ffta.adel))
 			end
 		end
 		-----------
@@ -301,6 +325,7 @@ end
 			self:AddLine("Right click for next FFT waypoint")
 			self:AddLine("|cffffcc88 /ffto for options|r")
 			self:AddLine("|cffcccc88 /fft ? for help|r")
+			self:AddLine("|cffcc8888 Reset time: "..ffta.art.."|r")
 		end
 
 		function dataobj:OnEnter()
@@ -321,35 +346,7 @@ end
 --xpcall(rdychk,'')-- keep note if needed later
 rdychk()
 --run once to initalize everything
------------------------------
---timer begin
------------------------------
-function ffta:TimerFeedback()
-	print("Reset detected : New FisherFriendToday")
-	fftcore("")
-	ffta.timerCount = 0
-	ffta.TimerTwo = ffta:ScheduleRepeatingTimer("TimerFeedbackTwo", 86400)
-	--timer #1 is time left before todays reset +5 sec
-	--timer #2 is just a 24hr repeat that starts when timer #1 dings
-end
 
---function MyAddOn:OnEnable()--not needed as rdychk already references it?
---  self.timerCount = 0
---end
-
-function ffta:TimerFeedbackTwo()
-	print("Another Reset detected : New FisherFriendToday")
-	fftcore()
-	ffta.timerCount = ffta.timerCount + 1
-	--'self' references keep yelling... bleh
-	if ffta.timerCount == 6 then --overkill? :)
-		ffta:CancelTimer(ffta.TimerTwo)
-	end
-end
-
------------------------------
---timer end code
------------------------------
 --run once to initalize everything
 
 --end --if you missed a close function, this can at least help format to track down the oops

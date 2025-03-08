@@ -1,8 +1,8 @@
 ﻿## Title: (FFT) FisherFriendToday
 # ## Title: FisherFriendToday
-## Version: 0.9.02 beta
+## Version: 0.9.10
 ## Author: llithari
-## Interface: 110007, 110100
+## Interface: 110007, 110100, 110105
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
 ## IconAtlas: 1053367
 ## IconTexture: 1053367

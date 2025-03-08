@@ -25,3 +25,8 @@
 0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
 0.9.01 Timers verified good
 0.9.02 CF file structure education
+0.9.06 2025-03-04 cleaned up timers
+	release (due to publishing hiccups, this moved past beta bout a week ago, so may as well be official)
+0.9.10 remove a timer, add a timer, move a timer, floor x)
+
+todo: ace menu, share pin
