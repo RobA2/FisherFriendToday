@@ -1,32 +1,32 @@
-	alpha
-0.3.71 - added margoss
-0.3.75 - use map pins if tomtom not loaded
-0.3.85 - fixed ttcheck
-0.3.87 2025-02-06 - adjustment option if cycle is out of sync
-0.3.88 - much fiddling with slash commands that won't matter when option menu is done
-0.3.90 2025-02-07 - set a first run announcement
-0.4.00 2025-02-08 - Complete rewrite of the tables
-0.4.01 2025-02-15 - added Dashi lib to start work on option menu[or not-no ldb?]
-0.4.02 Removed Dashi library... Love the options to simplify things, but feels like overkill right now
-0.4.03 tested with ai assisted code for menus.... omg just no :/
-0.4.04 Dashi is back... seems great for menu writing, but will still need ace later for ldb
-0.4.06 menu works-ish, but not referenced by main code yet
-0.6.06 2025-02-18 - MASSIVE coding for menu, saved variables & rewriting/removing slash arguments
-0.6.07 2025-02-21 - lets just say, there was no luck with the interface yet :/
-0.7.07 2025-02-23 - Major update with ace3/ldb... still issue with click, but it's progress
-0.8.18 2025-02-24 - toc update for 11.1. major rewrites get ldb click fixed -ldb to settings frame-tbd
-	beta
-0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
-0.8.29 2025-02-27 - cleaned up code for deployment/testing
-0.8.31 fiddly website pkg file formating :/
-0.8.41 fixed setup announcement & readycheck
-0.8.52 Category for toc & added tool for extreme code cleanup when publishing
-0.8.53 added ldb shift click margoss. Ctrl click reserved for menu
-0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
-0.9.01 Timers verified good
-0.9.02 CF file structure education
-0.9.06 2025-03-04 cleaned up timers
-	release (due to publishing hiccups, this moved past beta bout a week ago, so may as well be official)
+0.9.10	release (due to publishing hiccups, this moved past beta bout a week ago, so may as well be official)
 0.9.10 remove a timer, add a timer, move a timer, floor x)
+0.9.06 2025-03-04 cleaned up timers
+0.9.02 CF file structure education
+0.9.01 Timers verified good
+0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
+0.8.53 added ldb shift click margoss. Ctrl click reserved for menu
+0.8.52 Category for toc & added tool for extreme code cleanup when publishing
+0.8.41 fixed setup announcement & readycheck
+0.8.31 fiddly website pkg file formating :/
+0.8.29 2025-02-27 - cleaned up code for deployment/testing
+0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
+0.8.20	beta[reference]
+0.8.18 2025-02-24 - toc update for 11.1. major rewrites get ldb click fixed -ldb to settings frame-tbd
+0.7.07 2025-02-23 - Major update with ace3/ldb... still issue with click, but it's progress
+0.6.07 2025-02-21 - lets just say, there was no luck with the interface yet :/
+0.6.06 2025-02-18 - MASSIVE coding for menu, saved variables & rewriting/removing slash arguments
+0.4.06 menu works-ish, but not referenced by main code yet
+0.4.04 Dashi is back... seems great for menu writing, but will still need ace later for ldb
+0.4.03 tested with ai assisted code for menus.... omg just no :/
+0.4.02 Removed Dashi library... Love the options to simplify things, but feels like overkill right now
+0.4.01 2025-02-15 - added Dashi lib to start work on option menu[or not-no ldb?]
+0.4.00 2025-02-08 - Complete rewrite of the tables
+0.3.90 2025-02-07 - set a first run announcement
+0.3.88 - much fiddling with slash commands that won't matter when option menu is done
+0.3.87 2025-02-06 - adjustment option if cycle is out of sync
+0.3.85 - fixed ttcheck
+0.3.75 - use map pins if tomtom not loaded
+0.3.71 - added margoss
+0.3.00	alpha[reference]
 
 todo: ace menu, share pin
