@@ -1,4 +1,4 @@
-ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceComm-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local _, addon = ... --dashi?
 local L = addon.L --dashi?
@@ -26,26 +26,51 @@ local fftsettings = {
 		key = 'announce',
 		type = 'toggle',
 		title = L['Announcement on startup/reset?'],
-		tooltip = L['Turn the raid style announcement on/off'],
+		--tooltip = L['Turn the raid style announcement on/off'],
 		default = true,
 	},
 	{
 		key = 'anndelay',
 		type = 'menu',
 		title = L['Startup Announcement Delay?'],
-		tooltip = L['This will delay the raid style on startup'],
+		--tooltip = L['Seconds to delay the Announcement on startup'],
 		default = 10,--save as number
 		options = {
 			{value = 0, label = '0'},
-			{value = 5, label = '5'},
-			{value = 10, label = '10'},
-			{value = 20, label = '20'},
-			{value = 30, label = '30'},
-			{value = 60, label = '60'},
+			{value = 5, label = '5 Seconds'},
+			{value = 10, label = '10 Seconds'},
+			{value = 20, label = '20 Seconds'},
+			{value = 30, label = '30 Seconds'},
+			{value = 60, label = '60 Seconds'},
 		},
 
 		requires = 'announce', -- (optional) dependency on another setting (must be a "toggle"'myToggle')
 	},
+	-----reset warning
+	{
+		key = 'alert',
+		type = 'toggle',
+		title = L['Alert before Reset?'],
+		--tooltip = L['Turn raid style announcement on/off'],
+		default = true,
+	},
+	{
+		key = 'alerttime',
+		type = 'menu',
+		title = L['Minutes before Reset?'],
+		--tooltip = L['TimerSeconds to delay the Announcement on startup'],
+		default = 5,--save as number
+		options = {
+			{value = 1, label = '1 Minute'},
+			{value = 2, label = '2 Minutes'},
+			{value = 5, label = '5 Minutes'},
+			{value = 10, label = '10 Minutes'},
+		},
+
+		requires = 'alert', -- (optional) dependency on another setting (must be a "toggle"'myToggle')
+	},
+	-----end reset warning
+
 	{
 		key = 'adjshow',
 		type = 'toggle',
@@ -61,11 +86,11 @@ local fftsettings = {
 		default = 0,--save as number
 		options = {
 			{value = 0, label = '0'},
-			{value = 1, label = '1'},
-			{value = 2, label = '2'},
-			{value = 3, label = '3'},
-			{value = 4, label = '4'},
-			{value = 5, label = '5'},
+			{value = 1, label = '+1'},
+			{value = 2, label = '+2'},
+			{value = 3, label = '+3'},
+			{value = 4, label = '+4'},
+			{value = 5, label = '+5'},
 		},
 
 		requires = 'adjshow', -- (optional) dependency on another setting (must be a "toggle"'myToggle')
@@ -103,6 +128,7 @@ local fftc={
 local fftstring=""--define string for other files/functions
 SLASH_FFT1 = "/fft"
 local adj=0--initialize so addon loads correctly
+
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
 
@@ -138,6 +164,7 @@ local function fftcore(opt)
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
 	ffta.art=art--global for ldb
+	local wstr=("|cffff99ffFFT: |r")--not needed?
 	--end --end ff check
 	--------
 	--end core
@@ -148,117 +175,183 @@ local function fftcore(opt)
 	--thinking on kyboard... core runs on startup... and then only when called by player or timer
 	-- if it aint broken dont fix it?
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
-	if opt=='n' or opt=='next' then ff=fn end -- added for pin next
+	if opt=='n' or opt=='next' or opt=='na' or opt=='sn' then
+		ff=fn
+		wstr=("|cffff99ddNext: |r")
+	end
+	-- added for pin next
 	-----tostring
 	fftstring=tostring(fftbl [ff])-- when opt=m,n,or adj-shows on ldb
-	--that it shows on the ldb is fine, but need to prepend with the alternate info
-	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..fftstring)
+	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..wstr..fftstring)
 	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
 	local function waypin()
 		if ttcheck then
-			SlashCmdList.TOMTOM_WAY(usetom);
+			SlashCmdList.TOMTOM_WAY(usetom)
 			--print("TomTom"..usetom)
 		else
-			DEFAULT_CHAT_FRAME:AddMessage(usepin);
+			DEFAULT_CHAT_FRAME:AddMessage(usepin)
 			--print("MapPin")
 		end
 	end
+	--local tterk=("")--this was all to see if ldb would display... not so much lol
+	--if ttcheck then
 	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
+	--end
 	---------------
 	--end variable core
 	---------------
+
 	--if core is called direct but opt is nil'core()', core still runs, but no chat print
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
-		if adj>0 then print("|cffddaaffFF Today: [offset="..adj.."]|r")
+		if adj>0 then print("|cffffaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
 		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
 		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
 	end
-	if opt=='c' then -- used for misc testing
-		local Timer1 = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))
-		local Timer2 = SecondsToTime(ffta:TimeLeft(ffta.TimerD))
-		print("Timer reset: "..Timer1)
-		print("Ann timer left: "..Timer2)
-		print("Announce Delay: "..ffta.adel)
+	if opt=='c' then--clear map pin
+		C_Map.ClearUserWaypoint()
 	end
+	-----------
+	--share opt
+	-----------
+	--if opt=='s' then --disable on release for now
+	--	DEFAULT_CHAT_FRAME:AddMessage(usepin)--MUST set pin for share link to work
+	--	ffts=C_Map.GetUserWaypointHyperlink()
+	--	if ffts then
+	--		SendChatMessage("FFT: "..fftstring..ffts)
+	--	else
+	--		print("Please click pin to share")
+	--	end
+	--end
+
+	-----------
+	--share opt notes
+	-----------
+	-- share testing!! DO NOT SPAM!!
+	--pin share works! AceCom throttle?
+	--the only point is the chat text plus the selected hyperlink
+	--otherwise.. shift-clicking pin is already a thing
+	--in other words-- is it really worth it to include this option?
+	--this works, but if user does not click the link/has an existing pin/will share the wrong pin :/
+	--can't force clear since it would rerun,clear repeat & never share :(
+	--C_Map.ClearUserWaypoint()--clear to force user to 'click' the correct pin for sharing
+	--else it will share whatever is already pinned--dat is bad :)
+	--except...map pins are not autoselecting, so just keeps clearing & never shares
+	--local mapPoint = UiMapPoint.CreateFromVector2D(fftc[ff][1], fftc[ff][2]/100, fftc[ff][3]/100)
+	--ffts=C_Map.SetUserWaypoint(mapPoint)--does NOT like the formatting above
+	
+	---------
+	--misc notes
+	---------
+	--need to extract the 'name' from the ingame reputation		
+	--for factionID=2099,9 do-- idk for do loops lol
+	--friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = C_GossipInfo.GetFriendshipReputation(factionID)
+	-- DEFAULT_CHAT_FRAME:AddMessage("Name: "..friendName.." Rank: "..friendTextLevel.." ID: "..factionID)
+	--end
+	------------
+
 	if opt=='p' or opt=='pin' then
-		DEFAULT_CHAT_FRAME:AddMessage(usepin);
+		DEFAULT_CHAT_FRAME:AddMessage(usepin)
 	end
 	if opt=='w' or opt=='way' or opt=='m' or opt=='mar' then
 		waypin();
 	end
 	if opt=='n' or opt=='next' then
-		fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
-		print("|cffaaddffFF "..fftstring.."|r")
+		--fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
+		--print("|cffaaddffFF "..fftstring.."|r")
+		fftstring=(wstr..fftstring)--to show on ldb as well
+		print(fftstring)
 		--print("|cffaaddffFF Next: "..fftstring.."|r")
 		waypin();
 	end
-	if opt=='?' or opt=='help' then
-		print("|cffccffcc                 ===FFT===|r")
-		if not ttcheck then
-			print(tterk)
-		end
-		print("|cffffcccc/fft|r -prints the current Fisherfriend and reset time|r")
-		print("|cffffcccc/fft p / pin|r -map pin link for current Fisherfriend|r")
-		print("|cffffcccc/fft w / way|r -set waypoint for current Fisherfriend|r")
-		print("|cffffcccc/fft n / next|r -set waypoint for the next Fisherfriend|r")
-		print("|cffffcccc/fft m / mar|r -set waypoint for Margoss|r")
-		print("|cffffcc88/ffto or /ffts -Open the setting page|r")
-		--print("|cffffcc88/fft 1-5  -adjustment value if cycle is out of sync|r")
-		-- 1-5 disabled on line 28 in favor of option menu
-		print("|cffaacccc/fft a       -announcment for current Fisherfriend|r")
-		--print("|cffaacccc/fft c, info -testing info n stuffs|r")
-		print("|Cffff88ff/rl          -Reload interface|r")
-		--print("Timer left: "..AceTimer:TimeLeft(FisherFriendToday))--no??
-	end
-	--if opt== 'info' then -- this can go away in public builds? or retain for diags/saved var
-	--	print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-	--	local r1=GetCurrentRegionName() 
-	--	local r2=GetRealmName()
-	--	print(" Region/Realm: "..r1.."/"..r2)
-	--	v, b, d, t = GetBuildInfo()
-	--	print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
-	--	local d = C_DateAndTime.GetCurrentCalendarTime()
-	--	local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
-	--	local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
-	--	print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
-	--end
 	if opt=='a' then
 		--ignores menu setting in case they want to run this in a macro
 		RaidNotice_AddMessage(RaidWarningFrame,"FF Today: "..fftstring..". Reset ["..art.."]",ChatTypeInfo["RAID_WARNING"]);
 	end
-	globqrt=qrt--save as global for ace timer
-	--Timer1()---start/reset
-	ffta:CancelTimer(ffta.TimerOne)--reset on next line
-	ffta.TimerOne=ffta:ScheduleTimer("TimerFeedback", (globqrt+5))
-	if addon:GetOption('announce') then --settings check
-		ffta.adel=(addon:GetOption('anndelay'))
-	else
-		ffta.adel=0--if announc is nil, still need this for error prevention?
+	if opt=='na' then
+		RaidNotice_AddMessage(RaidWarningFrame,"FF Next: "..fftstring..". in "..qrts,ChatTypeInfo["RAID_WARNING"]);
+		fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
+		print("|cffaaddffFF "..fftstring.." in "..qrts.."|r");
+		
 	end
+	if opt=='?' or opt=='help' then
+		print("|cffccffcc   ===FFT===   ver: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		if not ttcheck then
+			print(tterk)
+		end
+		print("|cffffcccc/FFT|r - prints the current Fisherfriend and reset time|r")
+		print("|cffffcccc/FFT P, W|r - map pin / waypoint for current Fisherfriend|r")
+		--print("|cffffcccc/FFT P / pin|r -map pin link for current Fisherfriend|r")
+		--print("|cffffcccc/FFT W / way|r -set waypoint for current Fisherfriend|r")
+		print("|cffffcccc/FFT N|r - set waypoint for the Next Fisherfriend|r")
+		print("|cffffcccc/FFT M|r - set waypoint for Margoss|r")
+		print("|cffffcccc/FFT C|r - clear map pin|r")
+		print("|cffaacccc/FFT A / NA - announcment for current/next Fisherfriend|r")
+		print("|cffffcc88/FFTO or /FFTS - Open the options page|r")
+		print("|Cffff88ff/RL - Reload interface|r")
+	end
+
+	----------------------
+	--setup/reset timer section
+	----------------------
+	Gqrt=qrt--save as global for ace timer
+	ffta:CancelTimer(ffta.TimerOne)--reset on next line
+	--'alert' 'alerttime'
+
+	--on trial run, when timer cycles past the alert time...
+	--omg!!! Keeps running til reset...Huge spam glitch!
+	--oops
+	if addon:GetOption('alert') then --settings check
+		AlertResetTime=(addon:GetOption('alerttime')*60)
+		if Gqrt<=AlertResetTime then--no negative timers please
+			AlertResetTime=0 end--FAILSAFE!!
+		Gqrt=qrt-AlertResetTime
+	else
+		Gqrt=qrt--if 'alert' option changes, might need this here
+		AlertResetTime=("Unused")
+	end
+	ffta.TimerOne=ffta:ScheduleTimer("TimerFeedback", (Gqrt+2))--Always +2 seconds
+	--main timer gets really weird between 0-1 seconds remaining
+	--math.floor might fix, but, if timer ends before servertime cycles
+	-- it could still loop for that last second.. 2 sec offset just works
+	if addon:GetOption('announce') then --settings check
+		ffta.adel=(addon:GetOption('anndelay'))--startup ann check
+	else
+		ffta.adel=0--if announce is nil, still need this for error prevention?
+	end
+	-----------
+	--test/info last to catch vars after ALL calcs :)
+	-----------
+	if opt=='test' then
+		fftcore("nopt")--run core but no print
+		print("qrt: "..qrt.." Gqrt: "..Gqrt.." qrts: "..qrts.." AlertResetTime: "..AlertResetTime)
+	end
+	--if opt=='info' then end---moved ALL down to NOOOOTES
 end
 -----------------------
 -- end of core function
------------------------
------------------------------
 --timer feedback begin
 -----------------------------
---function ffta:OnEnable()
---	if addon:GetOption('announce') then--run once if option
---		ffta.TimerD=ffta:ScheduleTimer("TimerD1", (ffta.adel))
---	end
---	end
-function ffta:TimerD1()
+ffta.AlertOnce=nil
+function ffta:TimerD1()--used if startup announce enabled
 	fftcore("a")
 end
-function ffta:TimerFeedback()
-	print("|cffcccc88Reset detected : New FisherFriendToday|r")
-	fftcore("a")
-	fftcore("")
+function ffta:TimerFeedback()--used when reset timer cycles	
+	if addon:GetOption('alert') and not ffta.AlertOnce then --settings check
+		print("|cffffcc88Reset Soon|r")
+		fftcore("na")--print&announce
+		ffta.AlertOnce=true--one alert only please
+	else
+		print("|cffcccc88Reset detected : New FisherFriendToday|r")
+		fftcore("a")--announce
+		fftcore("")--print
+		ffta.AlertOnce=nil
+	end
+	
 end
------------------------------
---timer end code
------------------------------
+---------------------
+--timer feedback end 
+---------------------
 
 	SlashCmdList["FFT"] = fftcore
 	SLASH_RL1 = "/rl"
@@ -326,6 +419,7 @@ end
 			self:AddLine("|cffffcc88 /ffto for options|r")
 			self:AddLine("|cffcccc88 /fft ? for help|r")
 			self:AddLine("|cffcc8888 Reset time: "..ffta.art.."|r")
+			--self:AddLine(tterk)--it didnt like this lol
 		end
 
 		function dataobj:OnEnter()
@@ -345,7 +439,6 @@ end
 -----------------------------
 --xpcall(rdychk,'')-- keep note if needed later
 rdychk()
---run once to initalize everything
 
 --run once to initalize everything
 
@@ -354,6 +447,24 @@ rdychk()
 ----------------------------------------------------------
 --NOOOOOOOOOTES!!!!
 ----------------------------------
+--if opt=='info' then -- this can go away in public builds? or retain for diags/saved var
+	--	print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+	--	local r1=GetCurrentRegionName() 
+	--	local r2=GetRealmName()
+	--	print(" Region/Realm: "..r1.."/"..r2)
+	--	v, b, d, t = GetBuildInfo()
+	--	print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
+	--	local d = C_DateAndTime.GetCurrentCalendarTime()
+	--	local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
+	--	local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
+	--	print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
+	--local Timer1 = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))-- was used to verify timer functions
+	--local Timer2 = SecondsToTime(ffta:TimeLeft(ffta.TimerD))
+	--print("Timer reset: "..Timer1)
+	--print("Ann timer left: "..Timer2)
+	--print("Announce Delay: "..ffta.adel)
+	--end
+
 --fftcore only needs to be run on startup
 --further calls maybe causing garbage
 --new func just needs to ref existing data
@@ -444,23 +555,3 @@ rdychk()
 -- shoving ldb section here til I get global mess sorted
 -------------------------------------------
 -------------------
---open setting by left click ldb -- is not working
--------------------
-----local function fftOpenSet()
-----	--function wlMiniMapOnClick(self, button, down)
-----    if Settings and SettingsPanel and Settings.OpenToCategory then
-----        if SettingsPanel:IsShown() then
-----            HideUIPanel(SettingsPanel);
-----        else
-----            Settings.OpenToCategory("(FFT) FisherFriendToday");
-----			--Settings.OpenToCategory("FisherFriendToday");
-----        end
-----    elseif InterfaceOptionsFrame then
-----        if not InterfaceOptionsFrame:IsShown() then
-----            InterfaceOptionsFrame_OpenToCategory([[(FFT) FisherFriendToday]]);
-----			--InterfaceOptionsFrame_OpenToCategory([[FisherFriendToday]]);
-----        else
-----            InterfaceOptionsFrame:Hide();
-----        end
-----    end
-----end

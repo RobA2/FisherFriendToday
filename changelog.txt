@@ -1,11 +1,23 @@
-0.9.11 TOC update, catagory moved to Data Broker
+0.9.17 beta 2025-03-19 Timers verified
+	-waypoint flair?
+0.9.16 alpha 2025-03-17 warning timer works better
+0.9.15 alpha warning timer option works
+	-reformated help list (cap lock not req, but displays better)
+0.9.14 alpha testing 5 min warning before reset
+0.9.13 alpha added opt 'na' for 'Announce Next' updated '?' option
+	-possibly add a 'share next'
+	-definitely working on an optional 5 min warning timer before reset
+0.9.12 alpha 2025-03-13 much fussing with map pins n stuff
+	-added 'c' option to clear map pin
+	-'s' option to share map pin is... fussy
+0.9.11 TOC update, category moved to Data Broker
 0.9.10	release (due to publishing hiccups, this moved past beta bout a week ago, so may as well be official)
 0.9.10 remove a timer, add a timer, move a timer, floor x)
 0.9.06 2025-03-04 cleaned up timers
 0.9.02 CF file structure education
 0.9.01 Timers verified good
 0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
-0.8.53 added ldb shift click margoss. Ctrl click reserved for menu
+0.8.53 added ldb shift click for Margoss. Ctrl click reserved for menu
 0.8.52 Category for toc & added tool for extreme code cleanup when publishing
 0.8.41 fixed setup announcement & readycheck
 0.8.31 fiddly website pkg file formating :/
@@ -29,5 +41,4 @@
 0.3.75 - use map pins if tomtom not loaded
 0.3.71 - added margoss
 0.3.00	alpha[reference]
-
 todo: ace menu, share pin

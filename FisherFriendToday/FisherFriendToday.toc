@@ -1,30 +1,29 @@
 ﻿## Title: (FFT) FisherFriendToday
 # ## Title: FisherFriendToday
-## Version: 0.9.10
+## Version: 0.9.17 beta
 ## Author: llithari
-## Interface: 110007, 110100, 110105
+## Interface: 110100, 110105
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
-# change to Professions when localized
-## Category: User Interface
-## Category-enUS: User Interface
-## Category-deDE: Benutzerinterface
-## Category-esES: Interfaz de usuario
-## Category-esMX: Interfaz de usuario
-## Category-frFR: Interface utilisateur
-## Category-itIT: Interfaccia utente
-## Category-koKR: 사용자 인터페이스
-## Category-ptBR: Interface do usuário
-## Category-ruRU: Интерфейс пользователя
-## Category-zhCN: 用户界面
-## Category-zhTW: 使用者介面
+## Category: Data Broker
+## Category-enUS: Data Broker
+## Category-deDE: Datenbroker
+## Category-esES: Intermediario de Datos
+## Category-esMX: Intermediario de Datos
+## Category-frFR: Courtier de Données
+## Category-itIT: Intermediario di dati
+## Category-koKR: 데이터 브로커
+## Category-ptBR: Corretor de Dados
+## Category-ruRU: Посредник данных
+## Category-zhCN: 数据管理
+## Category-zhTW: 資料管理
 ## OptionalDeps: TomTom, Ace3
 ## SavedVariables: FFTDB
 
 ## X-Curse-Project-ID: 1209403
-# ## X-WoWI-ID: 
-# ## X-Wago-ID: 
+## X-WoWI-ID: 26912
+## X-Wago-ID: RNL9LD6o
 
 # Libraries
 libs\Dashi\embed.xml
