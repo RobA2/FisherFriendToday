@@ -2,7 +2,7 @@
 ## WoW retail addon for locating the Legion daily Fisherfriend of the Isles
 tldr: Help find the current npc for the Achievement "Fisherfriend of the Isles", <br>
 -which also helps with the fishing artifact "Underlight Angler"<br>
-(Tested on US & EU realms, should work for all realms) (not localized at this time)<br>
+(Tested on US & EU realms, should work for all realms)<br>
 - /fft and /fft ? to show info<br>
 - Partial localization: FisherFriend & Map names are localized.<br>
 - Slash(/) commands/help list are currently en-US only.<br>
