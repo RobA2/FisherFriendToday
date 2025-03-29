@@ -4,6 +4,8 @@ tldr: Help find the current npc for the Achievement "Fisherfriend of the Isles",
 -which also helps with the fishing artifact "Underlight Angler"<br>
 (Tested on US & EU realms, should work for all realms) (not localized at this time)<br>
 - /fft and /fft ? to show info<br>
+- Partial localization: FisherFriend & Map names are localized.<br>
+- Slash(/) commands/help list are currently en-US only.<br>
 ### Much longer & apparently obsessive Description <br>
 Tons of other addons for tracking reputations, fishing skill, etc...<br>
 But none to show which Fisherfriend is up that day!<br>
@@ -34,6 +36,10 @@ so that they can get the Underlight faster as well.<br>
 Though the achievements "A Cast Above the Rest" & "Bigger Fish to Fry"<br>
 are now account wide/warbound, still need the lures for the artifact fish :)<br>
 
+### Comments are welcome: If it works, Great! Let me know!!!
+### If something doesn't work, then please please let me know!!
+
+Still working on localizing the rest of the addon<br>
 
 Coffee is always nice :)<br>
 https://ko-fi.com/llithari
