@@ -1,6 +1,5 @@
 ﻿## Title: (FFT) FisherFriendToday
-# ## Title: FisherFriendToday
-## Version: 0.10.28
+## Version: 0.10.30
 ## Author: llithari
 ## Interface: 110100, 110105
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
@@ -32,21 +31,6 @@ libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml
 libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml
 libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml
 libs\Ace3\AceTimer-3.0\AceTimer-3.0.xml
-libs\Ace3\AceBucket-3.0\AceBucket-3.0.xml
-libs\Ace3\AceHook-3.0\AceHook-3.0.xml
-libs\Ace3\AceDB-3.0\AceDB-3.0.xml
-libs\Ace3\AceDBOptions-3.0\AceDBOptions-3.0.xml
-libs\Ace3\AceLocale-3.0\AceLocale-3.0.xml
-libs\Ace3\AceConsole-3.0\AceConsole-3.0.xml
-libs\Ace3\AceGUI-3.0\AceGUI-3.0.xml
-libs\Ace3\AceConfig-3.0\AceConfig-3.0.xml
-libs\Ace3\AceComm-3.0\AceComm-3.0.xml
-libs\Ace3\AceTab-3.0\AceTab-3.0.xml
-libs\Ace3\AceSerializer-3.0\AceSerializer-3.0.xml
 libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 
 fftmain.lua
-
-# libs\Ace3\LibStub\LibStub.xml
-# libs\Ace3\CallbackHandler-1.0\CallbackHandler-1.0.xml
-# libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml
