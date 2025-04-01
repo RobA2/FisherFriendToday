@@ -1,4 +1,8 @@
-ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceComm-3.0")
+--ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+--0.10.30 major cleanup on ace libs. Line above show what may be added back in when needed,
+-- but I'm not sure they were actually getting referenced in the code anyways
+--some were intended, but then changed, and just got left in for whatever reason
+ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceEvent-3.0", "AceTimer-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local _, addon = ... --dashi?
 local L = addon.L --dashi?
