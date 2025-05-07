@@ -16,8 +16,16 @@ local L = addon.L --dashi?
 -- settings[dashi]
 -- moved setting here til I can get files to load in order/fix event checking
 -----------------------------
-
+--local AOMD=C_AddOns.GetAddOnMetadata -- think i tried this before and it didnt work...possibly needs ()?
 local fftsettings = {
+	--	print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+	--{
+	--	key='upnote',
+	--	type='toggle',
+	--	title=L['Show update notes?'],
+	--	tooltip=L['Only shows once on startup when an update is installed'],
+	--	default=true,
+	--},
 	{
 		key = 'navT',
 		type = 'toggle',
@@ -99,6 +107,10 @@ local fftsettings = {
 
 		requires = 'adjshow', -- (optional) dependency on another setting (must be a "toggle"'myToggle')
 	},
+	--{vercomp='0.10.30',
+	--}
+	--	CurVer=C_AddOns.GetAddOnMetadata("FisherFriendToday","version")
+	-- i'm not sure dashi can handle a custom 'non display' setting for version checking :/
 }
 
 addon:RegisterSettings('FFTDB', fftsettings)
@@ -336,10 +348,34 @@ local function fftcore(opt)
 	-----------
 	--test/info last to catch vars after ALL calcs :)
 	-----------
-	if opt=='test' then
-		fftcore("nopt")--run core but no print
-		print("qrt: "..qrt.." Gqrt: "..Gqrt.." qrts: "..qrts.." AlertResetTime: "..AlertResetTime)
+	if opt=='rn' then
+		print("|cffff8855FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		print("Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes"))
 	end
+
+	if opt=='info' then -- this can go away in public builds? or retain for diags/saved var
+		print("|cffff8855FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		print("Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes"))
+		local r1=GetCurrentRegionName() 
+		local r2=GetRealmName()
+		print(" Region/Realm: "..r1.."/"..r2)
+		v, b, d, t = GetBuildInfo()
+		print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
+		local d = C_DateAndTime.GetCurrentCalendarTime()
+		local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
+		local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
+		print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
+		local Timer1 = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))-- was used to verify timer functions
+		local Timer2 = SecondsToTime(ffta:TimeLeft(ffta.TimerD))
+		print("Timer reset: "..Timer1)
+		print("Ann timer left: "..Timer2)
+		print("Announce Delay: "..ffta.adel)
+	end
+	-----------
+	--if opt=='test' then -- was used for timer tests, no need to keep active for now
+	--	fftcore("nopt")--run core but no print
+	--	print("qrt: "..qrt.." Gqrt: "..Gqrt.." qrts: "..qrts.." AlertResetTime: "..AlertResetTime)
+	--end
 	--if opt=='info' then end---moved ALL down to NOOOOTES
 end
 -----------------------
@@ -461,23 +497,6 @@ rdychk()
 ----------------------------------------------------------
 --NOOOOOOOOOTES!!!!
 ----------------------------------
---if opt=='info' then -- this can go away in public builds? or retain for diags/saved var
-	--	print("|cffff8855Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-	--	local r1=GetCurrentRegionName() 
-	--	local r2=GetRealmName()
-	--	print(" Region/Realm: "..r1.."/"..r2)
-	--	v, b, d, t = GetBuildInfo()
-	--	print(string.format("version = %s, build = %s, date = '%s', tocversion = %s.", v, b, d, t))
-	--	local d = C_DateAndTime.GetCurrentCalendarTime()
-	--	local weekDay = CALENDAR_WEEKDAY_NAMES[d.weekday]
-	--	local month = CALENDAR_FULLDATE_MONTH_NAMES[d.month]
-	--	print(format("Realm time is %02d:%02d, %s, %d %s %d", d.hour, d.minute, weekDay, d.monthDay, month, d.year))
-	--local Timer1 = SecondsToTime(ffta:TimeLeft(ffta.TimerOne))-- was used to verify timer functions
-	--local Timer2 = SecondsToTime(ffta:TimeLeft(ffta.TimerD))
-	--print("Timer reset: "..Timer1)
-	--print("Ann timer left: "..Timer2)
-	--print("Announce Delay: "..ffta.adel)
-	--end
 
 --fftcore only needs to be run on startup
 --further calls maybe causing garbage

@@ -1,8 +1,9 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.10.30
+## Version: 0.10.40
+## X-VerNotes: 2025-05-02 toc bump for patch 11.1.7, Ace library cleanup & version note research
 ## Author: llithari
-## Interface: 110100, 110105
-## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,help,way,next,pin,mar
+## Interface: 110105, 110107
+## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Pin,Mar,Rn,Info
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
 ## Category: Data Broker

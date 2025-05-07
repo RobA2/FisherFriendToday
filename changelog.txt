@@ -1,3 +1,4 @@
+0.10.40 2025-05-02 toc bump for patch 11.1.7
 0.10.30 Ace lib cleanup
 0.10.28 table generation for localized names/map
 0.9.18 minified dashi & ldb libs
