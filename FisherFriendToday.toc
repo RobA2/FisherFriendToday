@@ -1,6 +1,6 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.10.40
-## X-VerNotes: 2025-05-02 toc bump for patch 11.1.7, Ace library cleanup & version note research
+## Version: 0.10.42
+## X-VerNotes: 2025-05-17 Added map pin to startup. Addon description updated with command options
 ## Author: llithari
 ## Interface: 110105, 110107
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Pin,Mar,Rn,Info

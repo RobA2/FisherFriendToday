@@ -11,7 +11,9 @@ local L = addon.L --dashi?
 --had Dashi issues, thought it was conflicting libs
 --so far it was just my coding
 --dashi works fine, but may migrate all to ace3
-
+-----------------------------
+-- line 419ish-startup now shows pin with startup standard print
+-- look to integrate pin with /fft standard print
 -----------------------------
 -- settings[dashi]
 -- moved setting here til I can get files to load in order/fix event checking
@@ -26,6 +28,13 @@ local fftsettings = {
 	--	tooltip=L['Only shows once on startup when an update is installed'],
 	--	default=true,
 	--},
+	--{
+	--	key = 'desc',
+	--	type = 'toggle',
+	--	title=L['/FFT is the main command & can be followed by: ?, P, W, N, M, C, A, NA'],
+	--	default = false,
+	--},
+	--initail attempt to add plain text info to the option menu... dashi=grr :/
 	{
 		key = 'navT',
 		type = 'toggle',
@@ -306,7 +315,7 @@ local function fftcore(opt)
 			print(tterk)
 		end
 		print("|cffffcccc/FFT|r - prints the current Fisherfriend and reset time|r")
-		print("|cffffcccc/FFT P, W|r - map pin / waypoint for current Fisherfriend|r")
+		print("|cffffcccc/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
 		--print("|cffffcccc/FFT P / pin|r -map pin link for current Fisherfriend|r")
 		--print("|cffffcccc/FFT W / way|r -set waypoint for current Fisherfriend|r")
 		print("|cffffcccc/FFT N|r - set waypoint for the Next Fisherfriend|r")
@@ -412,7 +421,8 @@ end
 
 	local function rdychk()
 		function ffta:OnEnable()--prevents startup from glitching
-			fftcore("")
+			fftcore("") -- used to just print at start
+			fftcore("p") -- requested so can click right from start
 			if addon:GetOption('announce') then--run once if option
 				ffta.TimerD=ffta:ScheduleTimer("TimerD1", (ffta.adel))
 			end
