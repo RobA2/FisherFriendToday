@@ -5,7 +5,7 @@
 ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceEvent-3.0", "AceTimer-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local _, addon = ... --dashi?
-local L = addon.L --dashi?
+local L = addon.L --dashi localization
 --_G[addonName] = addon
 
 --had Dashi issues, thought it was conflicting libs
@@ -210,7 +210,9 @@ local function fftcore(opt)
 	--thinking on kyboard... core runs on startup... and then only when called by player or timer
 	-- if it aint broken dont fix it?
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
-	if opt=='n' or opt=='next' or opt=='na' or opt=='sn' then
+	if opt=='n' or opt=='next' or opt=='na' then -- or opt=='sn' then
+		--only time 'sn' [show next?] is listed, not sure what i had planned for it
+		--AHHHHH... SN = Share Next!!... will never? be used due to share compliacations
 		ff=fn
 		wstr=("|cffff99ddNext: |r")
 	end
@@ -220,12 +222,14 @@ local function fftcore(opt)
 	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..wstr..fftstring)
 	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
 	local function waypin()
+		DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 		if ttcheck then
+			--DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 			SlashCmdList.TOMTOM_WAY(usetom)
 			--print("TomTom"..usetom)
-		else
-			DEFAULT_CHAT_FRAME:AddMessage(usepin)
-			--print("MapPin")
+		--else
+		--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
+		--	--print("MapPin")
 		end
 	end
 	--local tterk=("")--this was all to see if ldb would display... not so much lol
@@ -240,8 +244,9 @@ local function fftcore(opt)
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
 		if adj>0 then print("|cffffaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
-		print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");
-		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");
+		print(usepin.."|cff00ddff Reset ["..art.."] in "..qrts.."|r");-- new print includes map pin on same line
+		--print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");--orig simple print
+		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");-- no clue what this was lol
 	end
 	if opt=='c' then--clear map pin
 		C_Map.ClearUserWaypoint()
@@ -285,9 +290,9 @@ local function fftcore(opt)
 	--end
 	------------
 
-	if opt=='p' or opt=='pin' then
-		DEFAULT_CHAT_FRAME:AddMessage(usepin)
-	end
+	--if opt=='p' or opt=='pin' then --integrated in basic slash comd, not needed anymore?
+	--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
+	--end
 	if opt=='w' or opt=='way' or opt=='m' or opt=='mar' then
 		waypin();
 	end
@@ -295,8 +300,10 @@ local function fftcore(opt)
 		--fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
 		--print("|cffaaddffFF "..fftstring.."|r")
 		fftstring=(wstr..fftstring)--to show on ldb as well
-		print(fftstring)
-		--print("|cffaaddffFF Next: "..fftstring.."|r")
+		--print(fftstring)--includes 'next' on same line, but no link
+		--print(usepin)--5/18/25 mirroring new output, but now waypin & usepin are a bit redundant
+		--print("|cffaaddffFF Next: "..usepin.."|r")
+		print("|cffff99ddFF Next:|r")
 		waypin();
 	end
 	if opt=='a' then
@@ -315,13 +322,14 @@ local function fftcore(opt)
 			print(tterk)
 		end
 		print("|cffffcccc/FFT|r - prints the current Fisherfriend and reset time|r")
-		print("|cffffcccc/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
+		--print("|cffffcccc/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
 		--print("|cffffcccc/FFT P / pin|r -map pin link for current Fisherfriend|r")
-		--print("|cffffcccc/FFT W / way|r -set waypoint for current Fisherfriend|r")
+		print("|cffffcccc/FFT W / way|r -set waypoint for current Fisherfriend|r")
 		print("|cffffcccc/FFT N|r - set waypoint for the Next Fisherfriend|r")
 		print("|cffffcccc/FFT M|r - set waypoint for Margoss|r")
 		print("|cffffcccc/FFT C|r - clear map pin|r")
 		print("|cffaacccc/FFT A / NA - announcment for current/next Fisherfriend|r")
+		print("|cffffcccc/FFT RN|r - Show release notes|r")
 		print("|cffffcc88/FFTO or /FFTS - Open the options page|r")
 		print("|Cffff88ff/RL - Reload interface|r")
 	end
@@ -358,8 +366,8 @@ local function fftcore(opt)
 	--test/info last to catch vars after ALL calcs :)
 	-----------
 	if opt=='rn' then
-		print("|cffff8855FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-		print("Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes"))
+		print("|cffccffccFFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		print("|cffffccccRelease Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes").."|r")
 	end
 
 	if opt=='info' then -- this can go away in public builds? or retain for diags/saved var
@@ -421,8 +429,8 @@ end
 
 	local function rdychk()
 		function ffta:OnEnable()--prevents startup from glitching
-			fftcore("") -- used to just print at start
-			fftcore("p") -- requested so can click right from start
+			fftcore("") -- usepin now integrated on same line. used to just print at start
+			--fftcore("p") -- requested so can click right from start
 			if addon:GetOption('announce') then--run once if option
 				ffta.TimerD=ffta:ScheduleTimer("TimerD1", (ffta.adel))
 			end
@@ -440,6 +448,12 @@ end
 							fftcore("m")--margoss
 						else
 							if (IsControlKeyDown())  then
+								--SlashCmdList.FisherFriendToday_FFTO('')-- nope lol
+					--dashi adds a random math for all event registers to ensure uniqueness
+					--meaning: need to isolate the local table used by dashi to
+					--isolate the generated value as it changes on every run
+					--ex: /ffts = FisherFriendTodaySlash0.57541233012491
+					--    /ffto = FisherFriendTodaySlash0.57541233012492
 								--time to learn ace menus
 								--Settings.OpenToCategory(categoryID)--dashi
 								--[opens settings, but not to addon]
@@ -475,6 +489,7 @@ end
 			--self:AddLine("|cffffcc88Right click for options|r") -- click section fine, but 'open settings' is not
 			self:AddLine("Left click for current FFT waypoint")
 			self:AddLine("Shift + Left click for Margoss")
+			--self:AddLine("Control + Left click for Options")--line 449
 			self:AddLine("Right click for next FFT waypoint")
 			self:AddLine("|cffffcc88 /ffto for options|r")
 			self:AddLine("|cffcccc88 /fft ? for help|r")

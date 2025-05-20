@@ -1,9 +1,9 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.10.42
-## X-VerNotes: 2025-05-17 Added map pin to startup. Addon description updated with command options
+## Version: 0.10.44
+## X-VerNotes: 2025-05-19 Map pins now integrated with standard output.|n TomTom Waypoints still optional.|n There is still some overlap if TomTom is used/not used,|n as the output will always show the map min link,|n but since the link is only active when clicked,|n will see if further testing is needed :)
 ## Author: llithari
 ## Interface: 110105, 110107
-## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Pin,Mar,Rn,Info
+## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Mar,Rn,Info
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
 ## Category: Data Broker
