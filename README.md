@@ -6,6 +6,18 @@ tldr: Help find the current npc for the Achievement "Fisherfriend of the Isles",
 - /fft and /fft ? to show info<br>
 - Partial localization: FisherFriend & Map names are localized.<br>
 - Slash commands/help list are currently english only.<br>
+
+/FFT is the main command & can be followed by: ?, W, N, M, C, A, NA, RN<br>
+/FFT - prints the current Fisherfriend and reset time<br>
+/FFT W - Waypoint for current Fisherfriend<br>
+/FFT N - set waypoint for the Next Fisherfriend<br>
+/FFT M - set waypoint for Margoss<br>
+/FFT C - clear map pin<br>
+/FFT A / NA - announcment for current/next Fisherfriend<br>
+/FFT RN - show latest release notes<br>
+/FFTO or /FFTS - Open the options page<br>
+/RL - Reload interface<br>
+
 ### Much longer & apparently obsessive Description <br>
 Tons of other addons for tracking reputations, fishing skill, etc...<br>
 But none to show which Fisherfriend is up that day!<br>
