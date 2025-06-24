@@ -1,3 +1,4 @@
+0.10.45 2025-06-24 PTR 11.2 testing with no apparent issues.|n Updated TOC.
 0.10.44 'p' option cleanup, no longer needed. 'rn' added for release notes
 0.10.43 map pin integrated on same line as orig print
 0.10.42 2025-05-17 added map pin to startup print. Addon description updated with command options
