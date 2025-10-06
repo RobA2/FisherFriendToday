@@ -154,18 +154,74 @@ local fftc={
 local ffid={2102,2097,2098,2099,2100,2101,1975}--MUST be in this order for now!!
 local fftbl={}
 for i=1,7 do--generate fftbl using client locale data
-	local genX=C_Reputation.GetFactionDataByID(ffid[i])
-	local mapX=C_Map.GetMapInfo(fftc[i][1])
+	local genX=C_Reputation.GetFactionDataByID(ffid[i])	--reads the faction name
+	local mapX=C_Map.GetMapInfo(fftc[i][1]) --reads map name
 	table.insert(fftbl,i,mapX.name.." - "..genX.name)
 	--print(fftb[i])
 end
 mapX,genX=nil--no need to clutter memory after tbl generated
+-----------
+	--was alpha testing to use rep standing for diplay & possible filtering
+	--but, turns out I did not save my edits to the studio copy
+	--and was lost, but as it didn't work as intended anyways
+	--saving these notes for future :)
+	------------
+	--because fft only updates when clicked, the rep data only updates when clicked
+	--meaning... rep standing defaults to 'neutral' until the gamedata is finished loading...
+	--might add a 5 sec refresh timer or have it check for reputation events
+	--might be more than I had really planned for the addon :)
+	--there is room to add rep toggles in the option menu without hitting the scroll limit...
+	--exceeding scroll/page space would not affect game/addon/ but would look very tacky imo :)
 -----------
 --end fftbl generator
 -----------
 local fftstring=""--define string for other files/functions
 SLASH_FFT1 = "/fft"
 local adj=0--initialize so addon loads correctly
+-----------
+--Font colors
+-----------
+local cRed="|cffff4400"--plain red is hard to read in chat, going with red-orange :)
+local cPch="|cffffcccc"--need to standardize font colors for easier reference
+local cGrn="|cff44ff00"
+-----------
+--end Font colors
+-----------
+-----------
+--Remix check
+-----------
+local remixC=0
+if C_CurrencyInfo.GetCurrencyListInfo(2654) then
+	remixC=cRed.."Remix check: Remix character! Fishing status unknown"
+else
+	remixC=cGrn.."Remix check: Standard retail character! Thanks for all the fish!!! ;)"
+end
+-- google ai code that was helpful, but broken as is :)
+--local function IsRemixCharacter()
+--    local remixBronzeCurrencyID = 2654; -- This is the currency ID for Bronze in the MoP Remix event.
+--    local currencyFound = false;
+--    -- Look through all currencies to see if Bronze is present.
+--    local currencyList = C_CurrencyInfo.GetCurrencyList();--this global does not exist...
+-- because the actual global is C_CurrencyInfo.GetCurrencyListInfo()
+--    if currencyList then
+--        for i, currency in ipairs(currencyList) do
+--            if currency.currencyID == remixBronzeCurrencyID then
+--                currencyFound = true;
+--                break;
+--            end
+--        end
+--    end
+--    return currencyFound;
+--end
+-----------
+--if IsRemixCharacter() then
+--    print("This is a Remix character!");
+--else
+--    print("This is a standard retail character.");
+--end
+-----------
+--end Remix check
+-----------
 
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
@@ -182,7 +238,11 @@ local function fftcore(opt)
 	else
 		adj=0--leave in place/settings change will need this in core
 	end
+	--local ttcheck=(C_AddOns.IsAddOnLoaded("TomTom") or C_AddOns.IsAddOnLoaded("WaypointUI")) and addon:GetOption('navT')
+	----WaypointUI needs a separate passthru. Above check is valid, but core still uses 'tomtom_way'
+	--local ttcheck=C_AddOns.IsAddOnLoaded("WaypointUI") and addon:GetOption('navT')
 	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom") and addon:GetOption('navT')
+	--WaypointUI
 	--Evaluator
 	--local ft=#fftbl--table length catcher--if needed in future
 	------------------
@@ -211,10 +271,10 @@ local function fftcore(opt)
 	-- if it aint broken dont fix it?
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
 	if opt=='n' or opt=='next' or opt=='na' then -- or opt=='sn' then
-		--only time 'sn' [show next?] is listed, not sure what i had planned for it
+		--this is the only time 'sn' [show next?] is listed, not sure what i had planned for it
 		--AHHHHH... SN = Share Next!!... will never? be used due to share compliacations
 		ff=fn
-		wstr=("|cffff99ddNext: |r")
+		wstr=("|cffff99ddNext: |r")--used with opt 'n' below as well
 	end
 	-- added for pin next
 	-----tostring
@@ -227,14 +287,14 @@ local function fftcore(opt)
 			--DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 			SlashCmdList.TOMTOM_WAY(usetom)
 			--print("TomTom"..usetom)
-		--else
-		--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
-		--	--print("MapPin")
+			--else
+			--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
+			--	--print("MapPin")
 		end
 	end
 	--local tterk=("")--this was all to see if ldb would display... not so much lol
 	--if ttcheck then
-	local tterk=("|cffff8800**[TomTom] not enabled/detected-FFT will use map pins**|r")
+	local tterk=(cRed.."**[TomTom] not enabled/detected-FFT will use map pins**|r")
 	--end
 	---------------
 	--end variable core
@@ -321,17 +381,25 @@ local function fftcore(opt)
 		if not ttcheck then
 			print(tterk)
 		end
-		print("|cffffcccc/FFT|r - prints the current Fisherfriend and reset time|r")
-		--print("|cffffcccc/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
-		--print("|cffffcccc/FFT P / pin|r -map pin link for current Fisherfriend|r")
-		print("|cffffcccc/FFT W / way|r -set waypoint for current Fisherfriend|r")
-		print("|cffffcccc/FFT N|r - set waypoint for the Next Fisherfriend|r")
-		print("|cffffcccc/FFT M|r - set waypoint for Margoss|r")
-		print("|cffffcccc/FFT C|r - clear map pin|r")
+		
+		print(cPch.."/FFT|r - prints the current Fisherfriend and reset time|r")
+		--print(c1.."/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
+		--print(c1.."/FFT P / pin|r -map pin link for current Fisherfriend|r")
+		print(cPch.."/FFT W / way|r -set waypoint for current Fisherfriend|r")
+		print(cPch.."/FFT N|r - waypoint for 'Next' ,'M' for Margoss or 'C' to clear the map pin|r")
+		--print(cPch.."/FFT M|r - set waypoint for Margoss|r")
+		--print(cPch.."/FFT C|r - clear map pin|r")
 		print("|cffaacccc/FFT A / NA - announcment for current/next Fisherfriend|r")
-		print("|cffffcccc/FFT RN|r - Show release notes|r")
+		print(cPch.."/FFT RN|r - Show release notes|r")
 		print("|cffffcc88/FFTO or /FFTS - Open the options page|r")
 		print("|Cffff88ff/RL - Reload interface|r")
+		print(remixC)
+		---------
+		--if IsRemixCharacter() then
+		--	print("This is a Remix character!");
+		--else
+		--	print("This is a standard retail character. (Non-Remix)");
+		--end
 	end
 
 	----------------------
@@ -449,11 +517,11 @@ end
 						else
 							if (IsControlKeyDown())  then
 								--SlashCmdList.FisherFriendToday_FFTO('')-- nope lol
-					--dashi adds a random math for all event registers to ensure uniqueness
-					--meaning: need to isolate the local table used by dashi to
-					--isolate the generated value as it changes on every run
-					--ex: /ffts = FisherFriendTodaySlash0.57541233012491
-					--    /ffto = FisherFriendTodaySlash0.57541233012492
+								--dashi adds a random math for all event registers to ensure uniqueness
+								--meaning: need to isolate the local table used by dashi to
+								--isolate the generated value as it changes on every run
+								--ex: /ffts = FisherFriendTodaySlash0.57541233012491
+								--    /ffto = FisherFriendTodaySlash0.57541233012492
 								--time to learn ace menus
 								--Settings.OpenToCategory(categoryID)--dashi
 								--[opens settings, but not to addon]

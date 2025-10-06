@@ -1,3 +1,6 @@
+0.1125.251006 added detection for legion remix/standard retail
+0.1125.250918 2025-09-18 ptr 11.2.5 no issues.|n- Legion Remix does not have FisherFriends thus no FFT.|n- updated version designations expansion(1125).date(yymmdd)
+0.10.46 2025-07-29 initial /way testing with addon WaypointUI
 0.10.45 2025-06-24 PTR 11.2 testing with no apparent issues.|n Updated TOC.
 0.10.44 'p' option cleanup, no longer needed. 'rn' added for release notes
 0.10.43 map pin integrated on same line as orig print
