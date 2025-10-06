@@ -50,8 +50,23 @@ are now account wide/warbound, still need the lures for the artifact fish :)<br>
 
 ### Comments are welcome: If it works, Great! Let me know!!!
 ### If something doesn't work, then please please let me know!!
-
 Still working on localizing the rest of the addon<br>
+
+Randomness regarding updates if you've managed to read this far down ;)
+<br>2025-Oct-6
+<br>-FFT is not a reputation addon.... it's not even a profession, fishing, npc or mapping addon, but...
+<br>those are the things people are likely to be looking for when they find this...
+<br>and though it certainly taps into all of those, at it's core... it's a calendar :)
+<br>A weirdly 6 day calender that cycles & doesn't easily match up to a typical 7 day calendar,
+<br>or even a typical 30 day month.
+<br>Which is possibly why no one wrote an addon for the FisherFriends in the many years before FFT :)
+<br>I got lucky & figured out a way to show the info in game vs having to check websites everyday.
+<br>That being said... my knowledge of addon design/writing is limited, as well as the time available to
+<br>update on a regular basis. I will always do my best to stay ahead of the patches,
+<br>even though it might be to update a few numbers so the game won't complain :)
+<br>So... that being said, I know it isn't flashy, but it gets the job done.
+<br>If you like it, Woot!! If you don't, then hopefully you'll find something you do.
+<br>Either way, Weeee!!!! :D
 
 Coffee is always nice :)<br>
 https://ko-fi.com/llithari
