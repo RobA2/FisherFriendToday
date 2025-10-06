@@ -128,6 +128,53 @@ addon:RegisterSettingsSlash('/ffts','/ffto')
 ----------------------------------
 -- end setting section
 ----------------------------------
+-----------
+--Font colors
+-----------
+local cRed="|cffff4400"--plain red is hard to read in chat, going with red-orange :)
+local cPch="|cffffcccc"--need to standardize font colors for easier reference
+local cGrn="|cff44ff00"
+-----------
+--end Font colors
+-----------
+
+
+-----------
+--Remix check
+-----------
+
+---------------------------------
+------always shows 'not found'... addon loading before character data?!?!?
+--local currencyID = 515 -- Example: currency ID
+--local currencyInfo = C_CurrencyInfo.GetCurrencyListInfo(currencyID)
+--if currencyInfo then
+--    local currencyName = currencyInfo.name
+--    local currencyAmount = currencyInfo.currentAmount
+--    print("You have " .. currencyAmount .. " " .. currencyName)
+--else
+--    print("Currency not found.")
+--end
+----------------------------------------
+
+--remix detection on hold... none of the currencies are detecting... remix or otherwise
+--
+
+--local remixC=0
+--local fftR=0
+--if C_CurrencyInfo.GetCurrencyListInfo(2654) then -- old 'Bronze' currency
+--if C_CurrencyInfo.GetCurrencyListInfo(2778) then -- legion remix currency
+--local fftR1=C_CurrencyInfo.GetCurrencyListInfo(614)
+--fftR=fftR1.discovered
+fftR=nil
+if fftR then-- test currency
+	local remixC=cRed.."Remix character! Fishing Unavailable"
+	--local fftR=true
+else
+	remixC=cGrn.."Remix check: Standard retail character! Thanks for all the fish!!! ;)"
+end
+-----------
+--end Remix check
+-----------
 --local function fftables()
 --local fftbl={
 --	"Broken Shore - Impus",
@@ -156,8 +203,12 @@ local fftbl={}
 for i=1,7 do--generate fftbl using client locale data
 	local genX=C_Reputation.GetFactionDataByID(ffid[i])	--reads the faction name
 	local mapX=C_Map.GetMapInfo(fftc[i][1]) --reads map name
-	table.insert(fftbl,i,mapX.name.." - "..genX.name)
-	--print(fftb[i])
+	if fftR then 
+		table.insert(fftbl,i,remixC)--if remix true, then all names are remix
+	else
+		table.insert(fftbl,i,mapX.name.." - "..genX.name)
+		--print(fftb[i])
+	end
 end
 mapX,genX=nil--no need to clutter memory after tbl generated
 -----------
@@ -178,50 +229,7 @@ mapX,genX=nil--no need to clutter memory after tbl generated
 local fftstring=""--define string for other files/functions
 SLASH_FFT1 = "/fft"
 local adj=0--initialize so addon loads correctly
------------
---Font colors
------------
-local cRed="|cffff4400"--plain red is hard to read in chat, going with red-orange :)
-local cPch="|cffffcccc"--need to standardize font colors for easier reference
-local cGrn="|cff44ff00"
------------
---end Font colors
------------
------------
---Remix check
------------
-local remixC=0
-if C_CurrencyInfo.GetCurrencyListInfo(2654) then
-	remixC=cRed.."Remix check: Remix character! Fishing status unknown"
-else
-	remixC=cGrn.."Remix check: Standard retail character! Thanks for all the fish!!! ;)"
-end
--- google ai code that was helpful, but broken as is :)
---local function IsRemixCharacter()
---    local remixBronzeCurrencyID = 2654; -- This is the currency ID for Bronze in the MoP Remix event.
---    local currencyFound = false;
---    -- Look through all currencies to see if Bronze is present.
---    local currencyList = C_CurrencyInfo.GetCurrencyList();--this global does not exist...
--- because the actual global is C_CurrencyInfo.GetCurrencyListInfo()
---    if currencyList then
---        for i, currency in ipairs(currencyList) do
---            if currency.currencyID == remixBronzeCurrencyID then
---                currencyFound = true;
---                break;
---            end
---        end
---    end
---    return currencyFound;
---end
------------
---if IsRemixCharacter() then
---    print("This is a Remix character!");
---else
---    print("This is a standard retail character.");
---end
------------
---end Remix check
------------
+
 
 --ALL FUNCTIONS HERE BEFORE SLASH PROC!!
 --note xxx=yyy vs xxx=(yyy) -- save the function vs save the result of the function
@@ -230,6 +238,7 @@ end
 	--core/variables
 	--------
 local function fftcore(opt)
+	--if fftR then return end--if remix detected [if checked here, all stops, which might be bad if detection is wrong
 	if opt then
 		opt=strlower(opt)
 	end
@@ -259,7 +268,7 @@ local function fftcore(opt)
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
 	ffta.art=art--global for ldb
-	local wstr=("|cffff99ffFFT: |r")--not needed?
+	local wstr=("|cffff99ffFFT: |r")--used in opt'n' [?]
 	--end --end ff check
 	--------
 	--end core
@@ -282,6 +291,7 @@ local function fftcore(opt)
 	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..wstr..fftstring)
 	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
 	local function waypin()
+		if fftR then return end--if remix detected, do nothing here
 		DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 		if ttcheck then
 			--DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
@@ -393,13 +403,7 @@ local function fftcore(opt)
 		print(cPch.."/FFT RN|r - Show release notes|r")
 		print("|cffffcc88/FFTO or /FFTS - Open the options page|r")
 		print("|Cffff88ff/RL - Reload interface|r")
-		print(remixC)
-		---------
-		--if IsRemixCharacter() then
-		--	print("This is a Remix character!");
-		--else
-		--	print("This is a standard retail character. (Non-Remix)");
-		--end
+		--print(remixC)-- if detection ever works.. print here :)
 	end
 
 	----------------------
@@ -433,6 +437,10 @@ local function fftcore(opt)
 	-----------
 	--test/info last to catch vars after ALL calcs :)
 	-----------
+	--if opt=='remix' then -- no go since the detect code only runs on startup
+	--	fftR=true
+	--	print("Remix test - reload to cancel")
+	--end
 	if opt=='rn' then
 		print("|cffccffccFFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
 		print("|cffffccccRelease Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes").."|r")
