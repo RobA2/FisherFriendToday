@@ -1,3 +1,5 @@
+0.1125.251014 Remix detection very extra verified!
+0.1125.251008 Remix detection verified/added
 0.1125.251006c toc bump for 11.2.5 [testing detection for legion remix/standard retail]
 0.1125.250918 2025-09-18 ptr 11.2.5 no issues.|n- Legion Remix does not have FisherFriends thus no FFT.|n- updated version designations expansion(1125).date(yymmdd)
 0.10.46 2025-07-29 initial /way testing with addon WaypointUI

@@ -1,6 +1,6 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.1125.251006c
-## X-VerNotes: 2025-10-06 ptr 11.2.5 no issues.|n- Legion Remix does not have FisherFriends thus no FFT.|n- updated version designations(patch.date)|n- testing detection for remix/retail character
+## Version: 0.1125.251014
+## X-VerNotes: Legion Remix does not have FisherFriends|n- Verified test for remix character|n- updated version designations(patch.date)
 ## Author: llithari
 ## Interface: 110200, 110205
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Mar,Rn,Info
