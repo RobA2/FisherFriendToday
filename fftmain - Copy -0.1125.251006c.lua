@@ -4,7 +4,7 @@
 --some were intended, but then changed, and just got left in for whatever reason
 ffta= LibStub("AceAddon-3.0"):NewAddon("FisherFriendToday", "AceEvent-3.0", "AceTimer-3.0")
 local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
-local _, addon = ... --dashi
+local _, addon = ... --dashi?
 local L = addon.L --dashi localization
 --_G[addonName] = addon
 
@@ -138,6 +138,54 @@ local cGrn="|cff44ff00"
 --end Font colors
 -----------
 
+
+-----------
+--Remix check
+-----------
+
+---------------------------------
+------always shows 'not found'... addon loading before character data?!?!?
+--local currencyID = 515 -- Example: currency ID
+--local currencyInfo = C_CurrencyInfo.GetCurrencyListInfo(currencyID)
+--if currencyInfo then
+--    local currencyName = currencyInfo.name
+--    local currencyAmount = currencyInfo.currentAmount
+--    print("You have " .. currencyAmount .. " " .. currencyName)
+--else
+--    print("Currency not found.")
+--end
+----------------------------------------
+
+--remix detection on hold... none of the currencies are detecting... remix or otherwise
+--
+
+--local remixC=0
+--local fftR=0
+--if C_CurrencyInfo.GetCurrencyListInfo(2654) then -- old 'Bronze' currency
+--if C_CurrencyInfo.GetCurrencyListInfo(2778) then -- legion remix currency
+--local fftR1=C_CurrencyInfo.GetCurrencyListInfo(614)
+--fftR=fftR1.discovered
+fftR=nil
+if fftR then-- test currency
+	local remixC=cRed.."Remix character! Fishing Unavailable"
+	--local fftR=true
+else
+	remixC=cGrn.."Remix check: Standard retail character! Thanks for all the fish!!! ;)"
+end
+-----------
+--end Remix check
+-----------
+--local function fftables()
+--local fftbl={
+--	"Broken Shore - Impus",
+--	"Azsuna - Ilyssia of the Waters",
+--	"Val'sharah - Keeper Raynae",
+--	"Highmountain - Akule Riverhorn",
+--	"Stormheim - Corbyn",
+--	"Suramar - Sha'leth",
+--	"Dalaran - Conjurer Margoss",
+--}
+--end--old fftable
 local fftc={
 	{646,34.00,50.00},--2102 impus
 	{630,43.20,40.60},--2097 ilyssia
@@ -155,14 +203,12 @@ local fftbl={}
 for i=1,7 do--generate fftbl using client locale data
 	local genX=C_Reputation.GetFactionDataByID(ffid[i])	--reads the faction name
 	local mapX=C_Map.GetMapInfo(fftc[i][1]) --reads map name
-	--since the events aren't reading well when the addon starts... moving this down to
-	--fftmain where it can run on update event?
-	--if ffta.fftR then 
-	--	table.insert(fftbl,i,ffta.remixC)--if remix true, then all names are remix
-	--else
-	table.insert(fftbl,i,mapX.name.." - "..genX.name)
-	--print(fftb[i])
-	--end
+	if fftR then 
+		table.insert(fftbl,i,remixC)--if remix true, then all names are remix
+	else
+		table.insert(fftbl,i,mapX.name.." - "..genX.name)
+		--print(fftb[i])
+	end
 end
 mapX,genX=nil--no need to clutter memory after tbl generated
 -----------
@@ -201,21 +247,18 @@ local function fftcore(opt)
 	else
 		adj=0--leave in place/settings change will need this in core
 	end
-
-	ffta.fftR=C_UnitAuras.GetPlayerAuraBySpellID(1213439)
-	if ffta.fftR then-- test for remix
-		ffta.remixC=(cRed.."Remix character! Fishing Unavailable")
-		for i=1,7 do-- remix check started with the tbl generation...oh well 'for i do' :)
-			table.insert(fftbl,i,ffta.remixC)--if remix true, then all names are remix
-		end
-	else
-		ffta.remixC=(cGrn.."Remix check: Standard retail character! Thanks for all the fish!!! ;)")
-	end
-
 	--local ttcheck=(C_AddOns.IsAddOnLoaded("TomTom") or C_AddOns.IsAddOnLoaded("WaypointUI")) and addon:GetOption('navT')
 	----WaypointUI needs a separate passthru. Above check is valid, but core still uses 'tomtom_way'
 	--local ttcheck=C_AddOns.IsAddOnLoaded("WaypointUI") and addon:GetOption('navT')
 	local ttcheck=C_AddOns.IsAddOnLoaded("TomTom") and addon:GetOption('navT')
+	--WaypointUI
+	--Evaluator
+	--local ft=#fftbl--table length catcher--if needed in future
+	------------------
+	--if not ff then --if already defined, then no need to recalc....
+	--except.. 'time saving' when i wrote the core, relies on the core recalcing...
+	--alot more than is really needed... sigh
+	------------------
 	local stl=tonumber(C_DateAndTime.GetServerTimeLocal())
 	local qrt=GetQuestResetTime() --save result
 	local qrts=SecondsToTime(qrt) --readable format
@@ -225,7 +268,7 @@ local function fftcore(opt)
 	local fn=1+math.fmod(ff+6,6)
 	local art=(date("%I:00 %p",time()+qrt+1)) --local time+reset+1
 	ffta.art=art--global for ldb
-	local wstr=("|cffff99ffFFT: |r")--default header - opt 'n' changes to 'next'
+	local wstr=("|cffff99ffFFT: |r")--used in opt'n' [?]
 	--end --end ff check
 	--------
 	--end core
@@ -236,7 +279,9 @@ local function fftcore(opt)
 	--thinking on kyboard... core runs on startup... and then only when called by player or timer
 	-- if it aint broken dont fix it?
 	if opt=='m' or opt=='mar' then ff=7 end -- added for margoss pin
-	if opt=='n' or opt=='next' or opt=='na' then
+	if opt=='n' or opt=='next' or opt=='na' then -- or opt=='sn' then
+		--this is the only time 'sn' [show next?] is listed, not sure what i had planned for it
+		--AHHHHH... SN = Share Next!!... will never? be used due to share compliacations
 		ff=fn
 		wstr=("|cffff99ddNext: |r")--used with opt 'n' below as well
 	end
@@ -246,10 +291,15 @@ local function fftcore(opt)
 	local usetom=("#"..fftc[ff][1].." "..fftc[ff][2].." "..fftc[ff][3].." "..wstr..fftstring)
 	local usepin=("|cffffff00|Hworldmap:"..fftc[ff][1]..":"..(fftc[ff][2]*100)..":"..(fftc[ff][3]*100).."|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a "..fftstring.."]|h|r")
 	local function waypin()
-		if ffta.fftR then return end--if remix detected, exit function
+		if fftR then return end--if remix detected, do nothing here
 		DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 		if ttcheck then
+			--DEFAULT_CHAT_FRAME:AddMessage(usepin)--print map pin link regardless
 			SlashCmdList.TOMTOM_WAY(usetom)
+			--print("TomTom"..usetom)
+			--else
+			--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
+			--	--print("MapPin")
 		end
 	end
 	--local tterk=("")--this was all to see if ldb would display... not so much lol
@@ -257,15 +307,16 @@ local function fftcore(opt)
 	local tterk=(cRed.."**[TomTom] not enabled/detected-FFT will use map pins**|r")
 	--end
 	---------------
-	--end variables core
+	--end variable core
 	---------------
 
 	--if core is called direct but opt is nil'core()', core still runs, but no chat print
 	if opt=='' or adj>0 then -- default print/also force print adjustment if set
-		if ffta.fftR then print(ffta.remixC) return end--if remix detected, alert & skip
 		if adj>0 then print("|cffffaaffFF Today: [offset="..adj.."]|r")
 		else print("|cffddaaffFF Today:|r") end
 		print(usepin.."|cff00ddff Reset ["..art.."] in "..qrts.."|r");-- new print includes map pin on same line
+		--print("|cffddddff "..fftstring..". Reset ["..art.."] in "..qrts.."|r");--orig simple print
+		--print("|cffddddff ",addon.fftshow,". Reset ["..art.."] in "..qrts.."|r");-- no clue what this was lol
 	end
 	if opt=='c' then--clear map pin
 		C_Map.ClearUserWaypoint()
@@ -312,13 +363,10 @@ local function fftcore(opt)
 	--if opt=='p' or opt=='pin' then --integrated in basic slash comd, not needed anymore?
 	--	DEFAULT_CHAT_FRAME:AddMessage(usepin)
 	--end
-	--if ffta.fftR then-- skip if remix
-	--else
 	if opt=='w' or opt=='way' or opt=='m' or opt=='mar' then
-		waypin();--waypin has remix check
+		waypin();
 	end
 	if opt=='n' or opt=='next' then
-		if ffta.fftR then print(ffta.remixC) return end--if remix detected, do nothing here
 		--fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
 		--print("|cffaaddffFF "..fftstring.."|r")
 		fftstring=(wstr..fftstring)--to show on ldb as well
@@ -326,7 +374,7 @@ local function fftcore(opt)
 		--print(usepin)--5/18/25 mirroring new output, but now waypin & usepin are a bit redundant
 		--print("|cffaaddffFF Next: "..usepin.."|r")
 		print("|cffff99ddFF Next:|r")
-		waypin();--waypin has remix check
+		waypin();
 	end
 	if opt=='a' then
 		--ignores menu setting in case they want to run this in a macro
@@ -336,29 +384,28 @@ local function fftcore(opt)
 		RaidNotice_AddMessage(RaidWarningFrame,"FF Next: "..fftstring..". in "..qrts,ChatTypeInfo["RAID_WARNING"]);
 		fftstring=("|cffaaddffNext: |r"..fftstring)--to show on ldb as well
 		print("|cffaaddffFF "..fftstring.." in "..qrts.."|r");
-
-		--end-- end remix check
+		
 	end
 	if opt=='?' or opt=='help' then
 		print("|cffccffcc   ===FFT===   ver: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-		if ffta.fftR then-- print if remix
-			print(cPch.."More options available in standard retail|r")
-		else
-			if not ttcheck then
-				print(tterk)
-			end
-
-			print(cPch.."/FFT|r - prints the current Fisherfriend and reset time|r")
-			print(cPch.."/FFT W / way|r -set waypoint for current Fisherfriend|r")
-			print(cPch.."/FFT N|r - waypoint for 'Next' ,'M' for Margoss or 'C' to clear the map pin|r")
-			print("|cffaacccc/FFT A / NA - announcment for current/next Fisherfriend|r")
-		end -- end remix check
+		if not ttcheck then
+			print(tterk)
+		end
+		
+		print(cPch.."/FFT|r - prints the current Fisherfriend and reset time|r")
+		--print(c1.."/FFT P, W|r - map Pin / Waypoint for current Fisherfriend|r")
+		--print(c1.."/FFT P / pin|r -map pin link for current Fisherfriend|r")
+		print(cPch.."/FFT W / way|r -set waypoint for current Fisherfriend|r")
+		print(cPch.."/FFT N|r - waypoint for 'Next' ,'M' for Margoss or 'C' to clear the map pin|r")
+		--print(cPch.."/FFT M|r - set waypoint for Margoss|r")
+		--print(cPch.."/FFT C|r - clear map pin|r")
+		print("|cffaacccc/FFT A / NA - announcment for current/next Fisherfriend|r")
 		print(cPch.."/FFT RN|r - Show release notes|r")
 		print("|cffffcc88/FFTO or /FFTS - Open the options page|r")
 		print("|Cffff88ff/RL - Reload interface|r")
-		print(ffta.remixC)-- if detection ever works.. print here :)
+		--print(remixC)-- if detection ever works.. print here :)
 	end
-	--end
+
 	----------------------
 	--setup/reset timer section
 	----------------------
@@ -395,14 +442,13 @@ local function fftcore(opt)
 	--	print("Remix test - reload to cancel")
 	--end
 	if opt=='rn' then
-		print(cGrn.."FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-		print(cPch.."Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes").."|r")
+		print("|cffccffccFFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		print("|cffffccccRelease Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes").."|r")
 	end
 
 	if opt=='info' then -- this can go away in public builds? or retain for diags/saved var
-		print(cGrn.."FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
-		print(cPch.."Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes").."|r")
-		print(ffta.remixC)-- if detection ever works.. print here :)
+		print("|cffff8855FFT Version: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","version").."|r")
+		print("Release Notes: "..C_AddOns.GetAddOnMetadata("FisherFriendToday","X-VerNotes"))
 		local r1=GetCurrentRegionName() 
 		local r2=GetRealmName()
 		print(" Region/Realm: "..r1.."/"..r2)
@@ -426,7 +472,7 @@ local function fftcore(opt)
 	--if opt=='info' then end---moved ALL down to NOOOOTES
 end
 -----------------------
--- end of core function <----!!!!
+-- end of core function
 --timer feedback begin
 -----------------------------
 ffta.AlertOnce=nil
@@ -456,6 +502,7 @@ end
 ------------
 --readycheck
 ------------
+
 	local function rdychk()
 		function ffta:OnEnable()--prevents startup from glitching
 			fftcore("") -- usepin now integrated on same line. used to just print at start
@@ -466,7 +513,6 @@ end
 		end
 		-----------
 		--end timer set #1
-		-----------
 		--ldb start
 		----------
 		local dataobj = ldb:NewDataObject("FisherFriendToday",
@@ -542,7 +588,6 @@ end
 -----------------------------
 -- end ldb section
 -----------------------------
-
 --xpcall(rdychk,'')-- keep note if needed later
 rdychk()
 
