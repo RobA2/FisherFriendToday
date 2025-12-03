@@ -57,7 +57,7 @@ local fftsettings = {
 		--tooltip = L['Seconds to delay the Announcement on startup'],
 		default = 10,--save as number
 		options = {
-			{value = 0, label = '0'},
+			{value = 0, label = '0 Seconds'},
 			{value = 5, label = '5 Seconds'},
 			{value = 10, label = '10 Seconds'},
 			{value = 20, label = '20 Seconds'},
@@ -456,7 +456,10 @@ end
 ------------
 --readycheck
 ------------
-	local function rdychk()
+--not sure where to place this yet. code works fine on the other lines, but startup is tricky
+--if ffta.fftR then print(ffta.remixC) return end--if remix detected, do nothing here
+--
+	local function rdychk()--needs better delay so remix code can work on startup
 		function ffta:OnEnable()--prevents startup from glitching
 			fftcore("") -- usepin now integrated on same line. used to just print at start
 			--fftcore("p") -- requested so can click right from start
@@ -525,6 +528,8 @@ end
 			self:AddLine("|cffcccc88 /fft ? for help|r")
 			self:AddLine("|cffcc8888 Reset time: "..ffta.art.."|r")
 			--self:AddLine(tterk)--it didnt like this lol
+			self:AddLine("- - - - -")
+			--self:AddLine("- - - - -") add fftbl names here?
 		end
 
 		function dataobj:OnEnter()
