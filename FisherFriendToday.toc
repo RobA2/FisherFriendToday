@@ -1,8 +1,8 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.1125.251014
-## X-VerNotes: Legion Remix does not have FisherFriends|n- Verified test for remix character|n- updated version designations(patch.date)
+## Version: 0.1127.251202
+## X-VerNotes: Remix detection working
 ## Author: llithari
-## Interface: 110200, 110205
+## Interface: 110205, 110207
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Mar,Rn,Info
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
