@@ -1,5 +1,6 @@
-0.1127.251202 -remix detection working, toc bump
-0.1125.251017.alpha -addon loads before auras & runs once before remix det can trigger
+0.1200.260114- toc bump for midnight
+0.1127.251202- remix detection working, toc bump
+0.1125.251017.alpha- addon loads before auras & runs once before remix det can trigger
 --if announcements are on, it usually triggers after detection, but..
 --if timer is 0, can still miss. If announcement is off, remix det never auto runs.
 --remix det does trigger if fft is called by command or ldb click
