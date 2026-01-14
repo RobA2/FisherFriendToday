@@ -1,5 +1,5 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.1214.251228
+## Version: 0.1200.260114
 ## X-VerNotes: toc bump for 12.0
 ## Author: llithari
 ## Interface: 110207, 120000
