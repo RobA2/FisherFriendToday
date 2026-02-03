@@ -1,1 +1,41 @@
-local a,b=...function b:RegisterSlash(...)local c=a..'Slash'..math.random()local d;local e=select('#',...)local f=select(e,...)if type(f)~='function'or e<2 then d=true else for g=1,e-1 do local h=select(g,...)if type(h)~='string'then d=true;break elseif not h:match('^/%a+$')then d=true;break else _G['SLASH_'..c..g]=h end end end;if d then error('Syntax: RegisterSlash("/slash1"[, "/slash2"[, ...]], callback)')else SlashCmdList[c]=f end end
+local addonName, addon = ...
+
+--[[ namespace:RegisterSlash(_command_[, _commandN,..._], _callback_) ![](https://img.shields.io/badge/function-blue)
+Registers chat slash `command`(s) with a `callback` function.
+
+Usage:
+```lua
+namespace:RegisterSlash('/hello', '/hi', function(input)
+    print('Hi')
+end)
+```
+--]]
+function addon:RegisterSlash(...)
+	local name = addonName .. 'Slash' .. math.random()
+	local failed
+
+	local numArgs = select('#', ...)
+	local callback = select(numArgs, ...)
+	if type(callback) ~= 'function' or numArgs < 2 then
+		failed = true
+	else
+		for index = 1, numArgs - 1 do
+			local slash = select(index, ...)
+			if type(slash) ~= 'string' then
+				failed = true
+				break
+			elseif not slash:match('^/%a+$') then
+				failed = true
+				break
+			else
+				_G['SLASH_' .. name .. index] = slash
+			end
+		end
+	end
+
+	if failed then
+		error('Syntax: RegisterSlash("/slash1"[, "/slash2"[, ...]], callback)')
+	else
+		SlashCmdList[name] = callback
+	end
+end

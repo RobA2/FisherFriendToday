@@ -1,0 +1,1 @@
+local a,b=...local c={}local d=GetLocale()b.L=setmetatable({},{__index=function(a,e)local f=c[d]return f and f[e]or tostring(e)end,__call=function(a,g)c[g]=c[g]or{}return c[g]end})

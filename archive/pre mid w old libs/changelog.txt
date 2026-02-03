@@ -1,0 +1,64 @@
+0.1200.260114- toc bump for midnight
+0.1127.251202- remix detection working, toc bump
+0.1125.251017.alpha- addon loads before auras & runs once before remix det can trigger
+--if announcements are on, it usually triggers after detection, but..
+--if timer is 0, can still miss. If announcement is off, remix det never auto runs.
+--remix det does trigger if fft is called by command or ldb click
+--but NEEDS that startup trigger to work gah!!!!
+0.1125.251014 Remix detection very extra verified!
+0.1125.251008 Remix detection verified/added
+0.1125.251006c toc bump for 11.2.5 [testing detection for legion remix/standard retail]
+0.1125.250918 2025-09-18 ptr 11.2.5 no issues.|n- Legion Remix does not have FisherFriends thus no FFT.|n- updated version designations expansion(1125).date(yymmdd)
+0.10.46 2025-07-29 initial /way testing with addon WaypointUI
+0.10.45 2025-06-24 PTR 11.2 testing with no apparent issues.|n Updated TOC.
+0.10.44 'p' option cleanup, no longer needed. 'rn' added for release notes
+0.10.43 map pin integrated on same line as orig print
+0.10.42 2025-05-17 added map pin to startup print. Addon description updated with command options
+0.10.40 2025-05-02 toc bump for patch 11.1.7
+0.10.30 Ace lib cleanup
+0.10.28 table generation for localized names/map
+0.9.18 minified dashi & ldb libs
+0.9.17 beta 2025-03-19 Timers verified
+	-waypoint flair?
+0.9.16 alpha 2025-03-17 warning timer works better
+0.9.15 alpha warning timer option works
+	-reformated help list (cap lock not req, but displays better)
+0.9.14 alpha testing 5 min warning before reset
+0.9.13 alpha added opt 'na' for 'Announce Next' updated '?' option
+	-possibly add a 'share next'
+	-definitely working on an optional 5 min warning timer before reset
+0.9.12 alpha 2025-03-13 much fussing with map pins n stuff
+	-added 'c' option to clear map pin
+	-'s' option to share map pin is... fussy
+0.9.11 TOC update, category moved to Data Broker
+0.9.10	release (due to publishing hiccups, this moved past beta bout a week ago, so may as well be official)
+0.9.10 remove a timer, add a timer, move a timer, floor x)
+0.9.06 2025-03-04 cleaned up timers
+0.9.02 CF file structure education
+0.9.01 Timers verified good
+0.9.00 2025-03-04 - Timers working!!(ok... technically still testing, but still...happy:)
+0.8.53 added ldb shift click for Margoss. Ctrl click reserved for menu
+0.8.52 Category for toc & added tool for extreme code cleanup when publishing
+0.8.41 fixed setup announcement & readycheck
+0.8.31 fiddly website pkg file formating :/
+0.8.29 2025-02-27 - cleaned up code for deployment/testing
+0.8.28 2025-02-25 - fixed ldb l/r click & display, moved to beta
+0.8.20	beta[reference]
+0.8.18 2025-02-24 - toc update for 11.1. major rewrites get ldb click fixed -ldb to settings frame-tbd
+0.7.07 2025-02-23 - Major update with ace3/ldb... still issue with click, but it's progress
+0.6.07 2025-02-21 - lets just say, there was no luck with the interface yet :/
+0.6.06 2025-02-18 - MASSIVE coding for menu, saved variables & rewriting/removing slash arguments
+0.4.06 menu works-ish, but not referenced by main code yet
+0.4.04 Dashi is back... seems great for menu writing, but will still need ace later for ldb
+0.4.03 tested with ai assisted code for menus.... omg just no :/
+0.4.02 Removed Dashi library... Love the options to simplify things, but feels like overkill right now
+0.4.01 2025-02-15 - added Dashi lib to start work on option menu[or not-no ldb?]
+0.4.00 2025-02-08 - Complete rewrite of the tables
+0.3.90 2025-02-07 - set a first run announcement
+0.3.88 - much fiddling with slash commands that won't matter when option menu is done
+0.3.87 2025-02-06 - adjustment option if cycle is out of sync
+0.3.85 - fixed ttcheck
+0.3.75 - use map pins if tomtom not loaded
+0.3.71 - added margoss
+0.3.00	alpha[reference]
+todo: ace menu, share pin

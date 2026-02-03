@@ -1,0 +1,1 @@
+local a,b=...function b:IsRetail()return WOW_PROJECT_ID==WOW_PROJECT_MAINLINE end;function b:IsClassicEra()return WOW_PROJECT_ID==WOW_PROJECT_CLASSIC end;function b:IsClassic()return not b:IsRetail()and not b:IsClassicEra()end;local a,c,a,d=GetBuildInfo()function b:HasBuild(e,f)if f and d<f then return end;return tonumber(c)>=e end

@@ -1,0 +1,1 @@
+local a,b=...local c=CreateFrame('Frame')c:Hide()function b:Hide(d,...)if type(d)=='string'then d=_G[d]end;if...then for e=1,select('#',...)do d=d[select(e,...)]end end;if d then d:SetParent(c)d.SetParent=nop;if d.UnregisterAllEvents then d:UnregisterAllEvents()end end end

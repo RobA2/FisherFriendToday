@@ -1,0 +1,1 @@
+local a,b=...function b:Print(...)local c=''for d=1,select('#',...)do local e=select(d,...)c=c..tostring(e)..' 'end;DEFAULT_CHAT_FRAME:AddMessage('|cff33ff99'..a..'|r: '..c:trim())end;function b:Printf(f,...)self:Print(f:format(...))end;function b:Dump(g,h)DevTools_Dump(g,h)end;function b:DumpUI(g)UIParentLoadAddOn('Blizzard_DebugTools')DisplayTableInspectorWindow(g)end

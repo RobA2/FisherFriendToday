@@ -1,9 +1,8 @@
 <Ui>
-	
 	<Script file='modules/build.lua'/>
 	<Script file='modules/misc.lua'/>
-	<!-- use to comment a section-->
 	<Script file='modules/event.lua'/>
+	<Script file='modules/callback.lua'/>
 	<Script file='modules/input.lua'/>
 	<Script file='modules/output.lua'/>
 	<Script file='modules/defer.lua'/>
@@ -13,4 +12,5 @@
 	<Script file='modules/settings.lua'/>
 	<Script file='modules/library.lua'/>
 	<Script file='modules/object.lua'/>
+	<Script file='modules/pin.lua'/>
 </Ui>
