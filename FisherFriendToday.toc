@@ -1,8 +1,8 @@
 ﻿## Title: (FFT) FisherFriendToday
-## Version: 0.1200.260203
-## X-VerNotes: ace3 & dashi lib update
+## Version: 0.1201.260209
+## X-VerNotes: toc bump, ace3 & dashi lib update
 ## Author: llithari
-## Interface: 110207, 120000
+## Interface: 120001
 ## Notes: FisherFriends and Where to Find Them|n/fft [options] ?,Way,Next,Mar,Rn,Info
 ## IconAtlas: 1053367
 ## IconTexture: 1053367
